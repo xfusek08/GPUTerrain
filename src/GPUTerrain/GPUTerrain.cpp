@@ -6,6 +6,20 @@ GPUTerrain::GPUTerrain() {}
 
 GPUTerrain::~GPUTerrain() {}
 
-bool GPUTerrain::getTrue() {
-  return true;
+void GPUTerrain::generate() {
+  _triangles = std::vector<float> {
+    -1.0f,  -1.0f,   0.0f,
+     1.0f,  -1.0f,   0.0f,
+     0.0f,   1.0f,   0.0f,
+  };
+
+  _colors = std::vector<float> {
+    1.0f, 0.0f, 0.0f,
+    0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 1.0f,
+  };
+
+  _indeces = std::vector<int> {
+    0, 1, 2
+  };
 }
