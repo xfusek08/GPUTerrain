@@ -1,20 +1,24 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(
-  GPUTerrain
-  VERSION 0.0.0
+# Check if we are building as stand-alone project
+# condition from https://stackoverflow.com/questions/13289314/cmake-check-if-the-main-project-was-called
+if( CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR )
+  project(
+    GPUTerrain
+    VERSION 0.0.0
   )
+endif()
 
 set(SOURCES
   src/${PROJECT_NAME}/GPUTerrain.cpp
-  )
+)
 
 set(PRIVATE_INCLUDES)
 
 set(PUBLIC_INCLUDES
   src/${PROJECT_NAME}/Fwd.h
   src/${PROJECT_NAME}/GPUTerrain.h
-  )
+)
 
 set(INTERFACE_INCLUDES)
 
