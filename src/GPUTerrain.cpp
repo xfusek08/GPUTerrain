@@ -1,4 +1,4 @@
-#include <GPUTerrain/GPUTerrain.h>
+#include <GPUTerrain.h>
 
 using namespace gpuTerrain;
 
@@ -7,7 +7,7 @@ GPUTerrain::GPUTerrain() {}
 GPUTerrain::~GPUTerrain() {}
 
 void GPUTerrain::generate() {
-  _triangles = std::vector<float> {
+  _vertices = std::vector<float> {
     -1.0f,  -1.0f,   0.0f,
      1.0f,  -1.0f,   0.0f,
      0.0f,   1.0f,   0.0f,
