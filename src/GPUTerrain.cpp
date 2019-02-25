@@ -8,9 +8,9 @@ GPUTerrain::~GPUTerrain() {}
 
 void GPUTerrain::generate() {
   _vertices = std::vector<float> {
-    -1.0f,  -1.0f,   0.0f,
-     1.0f,  -1.0f,   0.0f,
-     0.0f,   1.0f,   0.0f,
+   -1.0f,  -1.0f,  0.0f,
+    1.0f,  -1.0f,  0.0f,
+    0.0f,   1.0f,  0.0f,
   };
 
   _colors = std::vector<float> {
@@ -19,7 +19,7 @@ void GPUTerrain::generate() {
     0.0f, 0.0f, 1.0f,
   };
 
-  _indeces = std::vector<int> {
+  _indicies = std::vector<int> {
     0, 1, 2
   };
 }
