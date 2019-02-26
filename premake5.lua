@@ -1,3 +1,6 @@
+
+-- not working
+
 workspace "GPUTerrain"
 	architecture "x64"
 	startproject "GPUTerrain"
