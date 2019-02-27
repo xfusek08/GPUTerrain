@@ -17,5 +17,5 @@ TEST_CASE("Terrain generate test") {
   terrain->generate();
   REQUIRE(terrain->getVertices().size() > 0);
   REQUIRE(terrain->getColors().size() == terrain->getVertices().size());
-  REQUIRE(terrain->getIndeces().size() == terrain->getVertices().size() / 3);
+  REQUIRE(terrain->getIndicies().size() == terrain->getVertices().size() / 3);
 }
