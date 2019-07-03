@@ -18,11 +18,17 @@ set(INCLUDES
   src/GPUTerrain.h
 )
 
+SET(CMAKE_DEBUG_POSTFIX           "d"  CACHE STRING "add a postfix, usually d on windows")
+SET(CMAKE_RELEASE_POSTFIX         ""   CACHE STRING "add a postfix, usually empty on windows")
+SET(CMAKE_RELWITHDEBINFO_POSTFIX  "rd" CACHE STRING "add a postfix, usually empty on windows")
+SET(CMAKE_MINSIZEREL_POSTFIX      "s"  CACHE STRING "add a postfix, usually empty on windows")
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES} ${INCLUDES})          # Creating a shared (*.dll) library named by project name
                                                                     # and created form "SOURCES" and "INCLUDES" source files.
+add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME}                          # Including files from src directory to project, so compiler will
   PUBLIC src                                                        # be able to include necessary header files.
