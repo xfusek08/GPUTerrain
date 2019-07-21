@@ -5,17 +5,16 @@
 cmake_minimum_required(VERSION 3.10.1)
 
 project(
-  GPUTerrain
+  TerrainLib
   VERSION 0.0.0
 )
 
-set(SOURCES
-  src/GPUTerrain.cpp
+set(SRC_TERRAINLIB
+    src/${PROJECT_NAME}/Terrain.h src/${PROJECT_NAME}/Terrain.cpp
 )
 
-set(INCLUDES
-  src/Fwd.h
-  src/GPUTerrain.h
+source_group("TerrainLib" FILES
+    ${SRC_TERRAINLIB}
 )
 
 SET(CMAKE_DEBUG_POSTFIX           "d"  CACHE STRING "add a postfix, usually d on windows")
@@ -26,12 +25,12 @@ SET(CMAKE_MINSIZEREL_POSTFIX      "s"  CACHE STRING "add a postfix, usually empt
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 
-add_library(${PROJECT_NAME} SHARED ${SOURCES} ${INCLUDES})          # Creating a shared (*.dll) library named by project name
+add_library(${PROJECT_NAME} SHARED ${SRC_TERRAINLIB})          # Creating a shared (*.dll) library named by project name
                                                                     # and created form "SOURCES" and "INCLUDES" source files.
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 target_include_directories(${PROJECT_NAME}                          # Including files from src directory to project, so compiler will
-  PUBLIC src                                                        # be able to include necessary header files.
+  PUBLIC src                                                         # be able to include necessary header files.
 )
 
 option(${PROJECT_NAME}_BUILD_TESTS "toggle building of unit tests") # Setting an option for user of cmake to build project with unit tests.

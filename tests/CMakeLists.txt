@@ -6,4 +6,4 @@ target_include_directories(tests
   PRIVATE ${CMAKE_CURRENT_LIST_DIR}
 )
 
-target_link_libraries(tests GPUTerrain)
+target_link_libraries(tests TerrainLib)
