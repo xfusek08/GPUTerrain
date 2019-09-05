@@ -1,20 +1,18 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include <TerrainLib/terrainlib_export.h>
+#include <TerrainLib/TerrainFace.h>
 
 namespace tl
 {
     class Terrain
     {
     public:
-        TERRAINLIB_EXPORT Terrain();
-        TERRAINLIB_EXPORT ~Terrain();
-        TERRAINLIB_EXPORT void generate();
-        TERRAINLIB_EXPORT std::vector<float>    getVertices() const { return _vertices; }
-        TERRAINLIB_EXPORT std::vector<unsigned> getIndicies() const { return _indicies; }
+        TERRAINLIB_EXPORT Terrain(int resolution);
+        TERRAINLIB_EXPORT std::vector<std::shared_ptr<TerrainFace>> getFaces() const { return _faces; }
     private:
-        std::vector<float>     _vertices;
-        std::vector<unsigned>  _indicies;
+        std::vector<std::shared_ptr<TerrainFace>> _faces; // 6 faces on cube
     };
 }

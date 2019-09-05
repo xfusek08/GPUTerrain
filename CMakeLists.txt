@@ -9,8 +9,23 @@ project(
   VERSION 0.0.0
 )
 
+# find GPUengine library
+if(NOT TARGET GPUEngine)
+    find_package(GPUEngine COMPONENTS REQUIRED
+        geCore
+        geGL
+        geUtil
+    )
+endif()
+
+if(NOT TARGET glm)
+  find_package(glm REQUIRED)
+endif()
+
 set(SRC_TERRAINLIB
-    src/${PROJECT_NAME}/Terrain.h src/${PROJECT_NAME}/Terrain.cpp
+    src/${PROJECT_NAME}/Terrain.h       src/${PROJECT_NAME}/Terrain.cpp
+    src/${PROJECT_NAME}/TerrainFace.h   src/${PROJECT_NAME}/TerrainFace.cpp
+    src/${PROJECT_NAME}/Mesh.h
 )
 
 source_group("TerrainLib" FILES
@@ -25,13 +40,24 @@ SET(CMAKE_MINSIZEREL_POSTFIX      "s"  CACHE STRING "add a postfix, usually empt
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 
-add_library(${PROJECT_NAME} SHARED ${SRC_TERRAINLIB})          # Creating a shared (*.dll) library named by project name
+add_library(${PROJECT_NAME} SHARED ${SRC_TERRAINLIB})               # Creating a shared (*.dll) library named by project name
                                                                     # and created form "SOURCES" and "INCLUDES" source files.
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+
+target_link_libraries(${PROJECT_NAME}
+    geGL
+    geUtil
+    glm
+)
 
 target_include_directories(${PROJECT_NAME}                          # Including files from src directory to project, so compiler will
   PUBLIC src                                                         # be able to include necessary header files.
 )
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC
+    $<$<CONFIG:DEBUG>:"TL_DEBUG">
+)
+
 
 option(${PROJECT_NAME}_BUILD_TESTS "toggle building of unit tests") # Setting an option for user of cmake to build project with unit tests.
 if(${PROJECT_NAME}_BUILD_TESTS)                                     # Condition if option specified above is set to ON.
