@@ -22,16 +22,6 @@ if(NOT TARGET glm)
   find_package(glm REQUIRED)
 endif()
 
-set(SRC_TERRAINLIB
-    src/${PROJECT_NAME}/Terrain.h       src/${PROJECT_NAME}/Terrain.cpp
-    src/${PROJECT_NAME}/TerrainFace.h   src/${PROJECT_NAME}/TerrainFace.cpp
-    src/${PROJECT_NAME}/Mesh.h
-)
-
-source_group("TerrainLib" FILES
-    ${SRC_TERRAINLIB}
-)
-
 SET(CMAKE_DEBUG_POSTFIX           "d"  CACHE STRING "add a postfix, usually d on windows")
 SET(CMAKE_RELEASE_POSTFIX         ""   CACHE STRING "add a postfix, usually empty on windows")
 SET(CMAKE_RELWITHDEBINFO_POSTFIX  "rd" CACHE STRING "add a postfix, usually empty on windows")
@@ -40,8 +30,30 @@ SET(CMAKE_MINSIZEREL_POSTFIX      "s"  CACHE STRING "add a postfix, usually empt
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 
-add_library(${PROJECT_NAME} SHARED ${SRC_TERRAINLIB})               # Creating a shared (*.dll) library named by project name
-                                                                    # and created form "SOURCES" and "INCLUDES" source files.
+set(DEFAULT_RESOERCES_PATH "${CMAKE_CURRENT_LIST_DIR}/resources")
+set(${APP_NAME}_RESOURCES  "${DEFAULT_RESOERCES_PATH}" CACHE PATH "Relative or absolute path to Application resources.")
+
+set(SRC_TERRAINLIB
+    src/${PROJECT_NAME}/PlanetSurface.h       src/${PROJECT_NAME}/PlanetSurface.cpp
+)
+
+set(SRC_VENDOR_STB
+    src/vendor/stb/stb_image.h
+)
+
+source_group("TerrainLib" FILES
+    ${SRC_TERRAINLIB}
+)
+
+source_group("vendor/stb" FILES
+    ${SRC_VENDOR_STB}
+)
+
+add_library(${PROJECT_NAME} SHARED # Creating a shared (*.dll) library named by project name
+    ${SRC_TERRAINLIB}              # and created form "SOURCES" and "INCLUDES" source files.
+    ${SRC_VENDOR_STB}
+)
+
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 target_link_libraries(${PROJECT_NAME}
@@ -51,13 +63,18 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 target_include_directories(${PROJECT_NAME}                          # Including files from src directory to project, so compiler will
-  PUBLIC src                                                         # be able to include necessary header files.
+  PUBLIC src                                                        # be able to include necessary header files.
+)
+
+find_file(textureImage
+    earth_cube_map.png
+    HINTS ${${APP_NAME}_RESOURCES}
 )
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC
+    "EARTH_CUBE_MAP_PNG=\"${textureImage}\""
     $<$<CONFIG:DEBUG>:"TL_DEBUG">
 )
-
 
 option(${PROJECT_NAME}_BUILD_TESTS "toggle building of unit tests") # Setting an option for user of cmake to build project with unit tests.
 if(${PROJECT_NAME}_BUILD_TESTS)                                     # Condition if option specified above is set to ON.
