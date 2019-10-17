@@ -34,10 +34,13 @@ set(DEFAULT_RESOERCES_PATH "${CMAKE_CURRENT_LIST_DIR}/resources")
 set(${APP_NAME}_RESOURCES  "${DEFAULT_RESOERCES_PATH}" CACHE PATH "Relative or absolute path to Application resources.")
 
 set(SRC_TERRAINLIB
-    src/${PROJECT_NAME}/FaceRegion.h                src/${PROJECT_NAME}/FaceRegion.cpp
-    src/${PROJECT_NAME}/FaceTreeNode.h              src/${PROJECT_NAME}/FaceTreeNode.cpp
+    src/${PROJECT_NAME}/SurfaceRegion.h             src/${PROJECT_NAME}/SurfaceRegion.cpp
     src/${PROJECT_NAME}/PlanetSurface.h             src/${PROJECT_NAME}/PlanetSurface.cpp
+    src/${PROJECT_NAME}/PlanetCoordinateSystem.h    src/${PROJECT_NAME}/PlanetCoordinateSystem.cpp
     src/${PROJECT_NAME}/PlanetTextureGenerator.h    src/${PROJECT_NAME}/PlanetTextureGenerator.cpp
+    src/${PROJECT_NAME}/SurfaceConfig.h
+    src/${PROJECT_NAME}/utils.h
+    src/${PROJECT_NAME}/types.h
 )
 
 set(SRC_VENDOR_STB
