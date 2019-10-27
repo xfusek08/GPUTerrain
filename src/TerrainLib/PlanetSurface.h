@@ -34,6 +34,7 @@ namespace tl
         TERRAINLIB_EXPORT const std::vector<SurfaceRegion>& getRegions()                       const { return _regions; }
 
         // methods
+		TERRAINLIB_EXPORT void setConfig(SurfaceConfig config);
 
         /** Serachs for region with nearest point to given coordinates including wrapping around face edges. */
         TERRAINLIB_EXPORT SurfaceRegion getNearestRegionByPoint(FaceID faceId, glm::vec2 faceCoords, bool *onEdge);
@@ -49,5 +50,7 @@ namespace tl
 
         /** Initializes region array. */
         void initRegions();
+
+		glm::uvec4 getFaceColorForRegion(SurfaceRegion region);
     };
 }

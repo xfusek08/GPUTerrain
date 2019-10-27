@@ -18,18 +18,17 @@ SurfaceRegion::SurfaceRegion(shared_ptr<PlanetCoordinateSystem> coordinateSystem
     }
 }
 
-void SurfaceRegion::randomizeLocalPoint()
+void SurfaceRegion::randomizeLocalPoint(float jitter)
 {
+	if (jitter < 0) jitter = 0;
+	if (jitter > 1) jitter = 1;
+	
     float step = 1.0f / float(_coordinateSystem->getResolution());
+	float halfStep = step / 2;
     setLocalPointPosition(vec2(
-        _gridCoords.x * step + rand_f(step),
-        _gridCoords.y * step + rand_f(step)
+        _gridCoords.x * step + halfStep + (rand_f(jitter) - 0.5) * step,
+        _gridCoords.y * step + halfStep + (rand_f(jitter) - 0.5) * step
     ));
-
-    // setLocalPointPosition(vec2(
-    //     _gridCoords.x * step + (step / 2),
-    //     _gridCoords.y * step + (step / 2)
-    // ));
 }
 
 void SurfaceRegion::randomizeColor()

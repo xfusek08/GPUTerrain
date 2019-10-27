@@ -31,7 +31,7 @@ namespace tl
         // methods
 
         /** Sets local point position to random plane inside its grid. */
-        TERRAINLIB_EXPORT void randomizeLocalPoint();
+        TERRAINLIB_EXPORT void randomizeLocalPoint(float jitter = 1.0f);
 
         /** Sets color to random. */
         TERRAINLIB_EXPORT void randomizeColor();
