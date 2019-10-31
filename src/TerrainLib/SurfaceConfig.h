@@ -6,7 +6,7 @@ namespace tl
     {
     public:
 		unsigned int resolution    = 10;
-		float		 jitter        = 1.0f;
-		bool         showFaceColor = false;
+		float		 jitter        = 0.0f;
+		bool         showFaceColor = true;
     };
 }

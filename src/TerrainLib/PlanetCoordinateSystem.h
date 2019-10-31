@@ -18,6 +18,10 @@ namespace tl
 
 		// methods
 
+        glm::vec2 warp(glm::vec2 coords);
+
+        glm::vec2 unwarp(glm::vec2 coords);
+
 		/** Returns total number of regions on surface. */
 		unsigned int getTotalRegionCount();
 
@@ -74,6 +78,7 @@ namespace tl
         inline RegionID getRegionIdBy3dPosition(float x, float y, float z) { return getRegionIdBy3dPosition(glm::vec3(x, y, z)); }
 
     private:
+        const float WARP_MAGIC_ANGLE = 0.868734829276f;
         unsigned int _resolution;
     };
 }

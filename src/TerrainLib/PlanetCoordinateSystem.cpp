@@ -6,6 +6,18 @@ using namespace std;
 using namespace tl;
 using namespace glm;
 
+vec2 PlanetCoordinateSystem::warp(vec2 coords)
+{
+	auto res = tan(PlanetCoordinateSystem::WARP_MAGIC_ANGLE * local2dTo3d(coords))/tan(PlanetCoordinateSystem::WARP_MAGIC_ANGLE);
+	return local3dTo2d(res);
+}
+
+vec2 PlanetCoordinateSystem::unwarp(vec2 coords)
+{
+    auto res = atan(local2dTo3d(coords) * tan(PlanetCoordinateSystem::WARP_MAGIC_ANGLE))/PlanetCoordinateSystem::WARP_MAGIC_ANGLE;
+	return local3dTo2d(res);
+}
+
 unsigned int PlanetCoordinateSystem::getTotalRegionCount()
 {
     return _resolution * _resolution * 6;
@@ -16,7 +28,7 @@ FaceID PlanetCoordinateSystem::getFaceIdFromRegionId(RegionID RegionID)
     return FaceID(unsigned int(float(RegionID) / float(_resolution * _resolution)));
 }
 
-FaceID PlanetCoordinateSystem::getFaceIdFrom3dPosition(glm::vec3 position)
+FaceID PlanetCoordinateSystem::getFaceIdFrom3dPosition(vec3 position)
 {
     vec3 absVector = abs(position);
     float maxComp = max(max(absVector.x, absVector.y), absVector.z);
@@ -98,6 +110,7 @@ vec2 PlanetCoordinateSystem::local3dTo2d(vec3 local3dCoords)
 
 vec3 PlanetCoordinateSystem::localFaceCoordsToGlobal(FaceID faceId, vec2 localCoords)
 {
+    localCoords = warp(localCoords);
     auto pt = getPermutationMatrixByFaceId(faceId);
     auto p = local2dTo3d(localCoords);
 	return pt * p;
@@ -164,5 +177,5 @@ RegionID PlanetCoordinateSystem::getRegionIdBy3dPosition(vec3 position3D)
 {
     FaceID faceId = getFaceIdFrom3dPosition(position3D);
     mat3 permutationMatrix = getPermutationMatrixByFaceId(faceId);
-    return getRegionIdByLocalCoords(faceId, local3dTo2d(position3D * permutationMatrix));
+    return getRegionIdByLocalCoords(faceId, unwarp(local3dTo2d(position3D * permutationMatrix)));
 }

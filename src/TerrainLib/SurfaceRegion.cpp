@@ -20,14 +20,14 @@ SurfaceRegion::SurfaceRegion(shared_ptr<PlanetCoordinateSystem> coordinateSystem
 
 void SurfaceRegion::randomizeLocalPoint(float jitter)
 {
-	if (jitter < 0) jitter = 0;
-	if (jitter > 1) jitter = 1;
-	
+	if (jitter < 0) jitter = 0.0f;
+	if (jitter > 1) jitter = 1.0f;
+
     float step = 1.0f / float(_coordinateSystem->getResolution());
-	float halfStep = step / 2;
+	float halfStep = step / 2.0f;
     setLocalPointPosition(vec2(
-        _gridCoords.x * step + halfStep + (rand_f(jitter) - 0.5) * step,
-        _gridCoords.y * step + halfStep + (rand_f(jitter) - 0.5) * step
+        halfStep + _gridCoords.x * step + (rand_f(jitter) - jitter / 2.0f) * step,
+        halfStep + _gridCoords.y * step + (rand_f(jitter) - jitter / 2.0f) * step
     ));
 }
 
