@@ -60,10 +60,11 @@ SurfaceRegion PlanetSurface::getNearestRegionByPoint(FaceID faceId, glm::vec2 fa
 		sortedNeighbors[distance(neighbor.get3dPosition(), act3dPosition)] = neighbor;
 	}
 
-	auto closestDistance = sortedNeighbors.begin()->first;
+	auto closestDistance        = sortedNeighbors.begin()->first;
 	auto secondCloseestDistance = (++sortedNeighbors.begin())->first;
-	auto closestPosition = sortedNeighbors.begin()->second.get3dPosition();
+	auto closestPosition        = sortedNeighbors.begin()->second.get3dPosition();
 	auto secondCloseestposition = (++sortedNeighbors.begin())->second.get3dPosition();
+
 	auto pres = (1.0 / double(10 * _config.resolution));
 
 	vec3 n1 = cross(closestPosition, secondCloseestposition);
@@ -122,5 +123,5 @@ glm::uvec4 PlanetSurface::getFaceColorForRegion(SurfaceRegion region)
 		case FACE_SOUTH: color = uvec4(137, 54, 220, 0); break;
 	}
 	float c = float(region.getId() % (_coordinateSystem->getTotalRegionCount() / 6)) / float(_config.resolution * _config.resolution);
-	return mix(color, uvec4(c * 255, c * 255, c * 255, 1), 0.5);	
+	return mix(color, uvec4(c * 255, c * 255, c * 255, 1), 0.5);
 }
