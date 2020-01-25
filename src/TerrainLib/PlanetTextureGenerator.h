@@ -1,9 +1,11 @@
 #pragma once
 
 #include <memory>
-#include <TerrainLib/types.h>
-#include <TerrainLib/terrainlib_export.h>
 #include <geGL/Generated/OpenGLTypes.h>
+
+#include <TerrainLib/types.h>
+
+#include <TerrainLib/terrainlib_export.h>
 
 namespace tl
 {
