@@ -1,11 +1,8 @@
-#
-# Author: Petr Fusek
-#
 
-cmake_minimum_required(VERSION 3.10.1)
+cmake_minimum_required(VERSION 3.12.4)
 
 project(
-  TerrainLib
+  GeoPlanetLib
   VERSION 0.0.0
 )
 
@@ -33,31 +30,27 @@ set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 set(DEFAULT_RESOERCES_PATH "${CMAKE_CURRENT_LIST_DIR}/resources")
 set(${APP_NAME}_RESOURCES  "${DEFAULT_RESOERCES_PATH}" CACHE PATH "Relative or absolute path to Application resources.")
 
-set(SRC_TERRAINLIB
-    src/${PROJECT_NAME}/SurfaceRegion.h             src/${PROJECT_NAME}/SurfaceRegion.cpp
-    src/${PROJECT_NAME}/PlanetSurface.h             src/${PROJECT_NAME}/PlanetSurface.cpp
-    src/${PROJECT_NAME}/PlanetCoordinateSystem.h    src/${PROJECT_NAME}/PlanetCoordinateSystem.cpp
-    src/${PROJECT_NAME}/PlanetTextureGenerator.h    src/${PROJECT_NAME}/PlanetTextureGenerator.cpp
-    src/${PROJECT_NAME}/SurfaceConfig.h
-    src/${PROJECT_NAME}/utils.h
-    src/${PROJECT_NAME}/types.h
+set(SOURCES
+    src/${PROJECT_NAME}/Surface.h               src/${PROJECT_NAME}/Surface.cpp
+    src/${PROJECT_NAME}/Region.h
+    src/${PROJECT_NAME}/RegionAttribute.h
+    src/${PROJECT_NAME}/CoordinateSystem.h      src/${PROJECT_NAME}/CoordinateSystem.cpp
+    src/${PROJECT_NAME}/CoordinateTypes.h
+
+    src/${PROJECT_NAME}/AbstactFactory.h
+    src/${PROJECT_NAME}/SurfaceModifier.h      src/${PROJECT_NAME}/SurfaceModifier.cpp
 )
 
-set(SRC_VENDOR_STB
-    src/vendor/stb/stb_image.h
+set(SOURCES_MODIFIERS
+    src/${PROJECT_NAME}/modifiers/RandomColorModifier.h  src/${PROJECT_NAME}/modifiers/RandomColorModifier.cpp
 )
 
-source_group("TerrainLib" FILES
-    ${SRC_TERRAINLIB}
-)
+source_group("${PROJECT_NAME}"            FILES ${SOURCES})
+source_group("${PROJECT_NAME}\\modifiers" FILES ${SOURCES_MODIFIERS})
 
-source_group("vendor/stb" FILES
-    ${SRC_VENDOR_STB}
-)
-
-add_library(${PROJECT_NAME} SHARED # Creating a shared (*.dll) library named by project name
-    ${SRC_TERRAINLIB}              # and created form "SOURCES" and "INCLUDES" source files.
-    ${SRC_VENDOR_STB}
+add_library(${PROJECT_NAME} SHARED                                  # Creating a shared (*.dll) library named by project name
+    ${SOURCES}                                                      # and created form "SOURCES" and "INCLUDES" source files.
+    ${SOURCES_MODIFIERS}
 )
 
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
@@ -72,14 +65,8 @@ target_include_directories(${PROJECT_NAME}                          # Including 
   PUBLIC src                                                        # be able to include necessary header files.
 )
 
-find_file(textureImage
-    earth_cube_map.png
-    HINTS ${${APP_NAME}_RESOURCES}
-)
-
 target_compile_definitions(${PROJECT_NAME} PUBLIC
-    "EARTH_CUBE_MAP_PNG=\"${textureImage}\""
-    $<$<CONFIG:DEBUG>:"TL_DEBUG">
+    $<$<CONFIG:DEBUG>:"GP_DEBUG">
 )
 
 option(${PROJECT_NAME}_BUILD_TESTS "toggle building of unit tests") # Setting an option for user of cmake to build project with unit tests.

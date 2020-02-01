@@ -1,9 +1,15 @@
-cmake_minimum_required(VERSION 3.10.1)
 
-add_executable(tests tests.cpp catch.hpp)
+cmake_minimum_required(VERSION 3.12.4)
 
-target_include_directories(tests
+add_executable(gp_tests
+    TestsMain.cpp
+    catch.hpp
+    testSuites/testSurface.cpp
+    testSuites/testSurfaceModifier.cpp
+)
+
+target_include_directories(gp_tests
   PRIVATE ${CMAKE_CURRENT_LIST_DIR}
 )
 
-target_link_libraries(tests TerrainLib)
+target_link_libraries(gp_tests GeoPlanetLib)

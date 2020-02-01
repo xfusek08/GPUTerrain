@@ -1,2 +1,2 @@
 
-# Library for procedural terrain generation
+# Library for generating of procedural planet surfacess
