@@ -17,30 +17,49 @@ namespace gp
         SurfacePosition(CoordinateSystem coordinateSystem, RegionID regionId, glm::vec2 localOffset = glm::vec2(0.5, 0.5))
             : coordinateSystem(coordinateSystem), regionId(regionId), localOffset(localOffset) {}
 
-        SurfacePosition(CoordinateSystem coordinateSystem, FaceID faceId, glm::vec2 localPosition)
-            : coordinateSystem(coordinateSystem) { setLocal(faceId, localPosition); }
+        SurfacePosition(CoordinateSystem coordinateSystem, FaceID faceId, glm::vec2 localCoordition)
+            : coordinateSystem(coordinateSystem) { setLocal(localCoordition, faceId); }
 
-        SurfacePosition(CoordinateSystem coordinateSystem, glm::vec3 globalPosition)
-            : coordinateSystem(coordinateSystem) { setGlobal(globalPosition); }
+        SurfacePosition(CoordinateSystem coordinateSystem, glm::vec3 globalCoordition)
+            : coordinateSystem(coordinateSystem) { setGlobal(globalCoordition); }
 
-        glm::vec3 getGlobal()      const; ///< A 3d position on surface of unit sphere.
-        glm::vec2 getLocal()       const; ///< A 2d position in current face from top left corner from 0 to 1
-        glm::vec2 getLocalOffset() const; ///< A 2d position in current region from top left corner from 0 to 1
-        glm::vec2 getLocalWarped() const; ///< A 2d position in current face warped for normalization
-        RegionID  getRegionID()    const; ///< Id of current region
-        FaceID    getFaceID()      const; ///< id of current face
+        /// Id of current region
+        inline RegionID  getRegionID()    const { return regionId; }
+
+        /// A 2d position in current region from top left corner from 0 to 1
+        inline glm::vec2 getLocalOffset() const { return localOffset; }
+
+        // calculated getters
+
+        FaceID     getFaceID()           const; ///< id of current face
+        glm::vec3  getGlobal()           const; ///< A 3d position on surface of unit sphere.
+        glm::vec2  getLocal()            const; ///< A 2d position in current face from top left corner from 0 to 1
+        glm::vec2  getLocalWarped()      const; ///< A 2d position in current face warped for normalization
+        glm::uvec2 getFaceGridPosition() const; ///< A 2d integer index in face grid.
+
+        //setters
 
         /// Sets position from global space
-        void setGlobal(glm::vec3);
+        void setGlobal(glm::vec3 gPos);
+        inline void setGlobal(float gPosX, float gPosY, float gPosZ) { setGlobal(glm::vec3(gPosX, gPosY, gPosZ)); }
 
-        /// Sets position from local face position
-        void setLocal(FaceID faceId, glm::vec2 position);
+        /// Sets position from local position in a face
+        void setLocal(glm::vec2 lCoords, FaceID faceId);
+        inline void setLocal(glm::vec2 lCoords)                           { setLocal(lCoords, getFaceID()); }
+        inline void setLocal(float lCoordX, float lCoordY, FaceID faceId) { setLocal(glm::vec2(lCoordX, lCoordY), faceId); }
+        inline void setLocal(float lCoordX, float lCoordY)                { setLocal(glm::vec2(lCoordX, lCoordY), getFaceID()); }
 
         /// Sets position from local face warped position
-        void setLocalWarped(FaceID faceId, glm::vec2 warpedPosition);
+        void setLocalWarped(glm::vec2 wlCoords, FaceID faceId);
+        inline void setLocalWarped(glm::vec2 wlCoords)                            { setLocalWarped(wlCoords, getFaceID()); }
+        inline void setLocalWarped(float wlCoordX, float wlCoordY, FaceID faceId) { setLocalWarped(glm::vec2(wlCoordX, wlCoordY), faceId); }
+        inline void setLocalWarped(float wlCoordX, float wlCoordY)                { setLocalWarped(glm::vec2(wlCoordX, wlCoordY), getFaceID()); }
 
         /// Sets position from region id and inner region offset
-        void setLocalOffset(RegionID region, glm::vec2 position);
+        inline void setLocalOffset(glm::vec2 offset)                                { localOffset = glm::clamp(offset, 0.0f, 1.0f); }
+        inline void setLocalOffset(glm::vec2 offset, RegionID regionId)             { setLocalOffset(offset); regionId = regionId; }
+        inline void setLocalOffset(float offsetX, float offsetY)                    { setLocalOffset(glm::vec2(offsetX, offsetY)); }
+        inline void setLocalOffset(float offsetX, float offsetY, RegionID regionId) { setLocalOffset(glm::vec2(offsetX, offsetY), regionId); }
 
     private:
         // properties

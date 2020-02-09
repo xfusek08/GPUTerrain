@@ -16,6 +16,7 @@ namespace gp
     typedef union {
         float scalar;
         glm::vec3 vector3;
+        glm::uvec3 uVector3;
     } RegionAttributeData;
 
     /**

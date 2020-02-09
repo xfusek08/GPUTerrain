@@ -12,15 +12,12 @@ namespace gp
     {
     public:
         // propertires
+        SurfacePosition position;
         std::map<RegionAttributeType, RegionAttribute> attributes;
 
         // methods
 		Region(SurfacePosition position) : position(position) {}
 
-        inline RegionID        getId()       const { return position.getRegionID(); }
-        inline SurfacePosition getPosition() const { return position; }
-
-    private:
-        SurfacePosition position;
+        inline RegionID getID() const { return position.getRegionID(); }
     };
 }
