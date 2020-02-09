@@ -20,7 +20,7 @@ namespace gp
         public:
             FaceColorModifier();
 
-            virtual bool apply(Surface surface) override;
+            virtual bool apply(std::shared_ptr<Surface> surface) override;
         };
 
         REGISTER_AF_TYPE(FaceColorModifier, SurfaceModifier);

@@ -59,6 +59,33 @@ void assertModifierDontExists(string ident, SurfaceGenerator generator)
 	REQUIRE(item.modifier == nullptr);
 }
 
+class SurfaceModifierShim : public SurfaceModifier
+{
+public:
+    // propertires
+    bool valid = false;
+    bool called = false;
+    bool returnValue = true;
+
+    // methods
+    bool apply(std::shared_ptr<Surface> surface) override
+    {
+        called = true;
+
+        valid = surface != nullptr
+            && surface->getResolution() > 0
+            && surface->getRegions().size() > 0;
+
+        return returnValue;
+    }
+
+    void reset()
+    {
+        valid = false;
+        called = false;
+    }
+};
+
 // =============================================================================
 // TESTS
 // =============================================================================
@@ -249,7 +276,6 @@ TEST_CASE("test disable enable modifier") {
 	REQUIRE_FALSE(generator.disableModifier("asd"));
 }
 
-
 TEST_CASE("test generate") {
 	auto generator = SurfaceGenerator({ "JitterModifier", "RandomColorModifier" });
 
@@ -269,5 +295,34 @@ TEST_CASE("test generate") {
 }
 
 TEST_CASE("test apply modifiers") {
-	throw "not implemented";
+    auto generator = SurfaceGenerator(vector<string>{});
+
+    auto surface = make_shared<Surface>();
+
+    auto modifierValid = make_shared<SurfaceModifierShim>();
+    auto modifierInvalid = make_shared<SurfaceModifierShim>();
+    auto modifierValid2 = make_shared<SurfaceModifierShim>();
+
+    modifierInvalid->returnValue = false;
+
+    generator.addModifier("modifierValid", modifierValid);
+    generator.addModifier("modifierInvalid", modifierInvalid, false);
+    generator.addModifier("modifierDisabled", modifierValid2);
+
+    REQUIRE(generator.applyModifiers(surface));
+
+    REQUIRE(modifierValid->valid);
+    REQUIRE_FALSE(modifierInvalid->called);
+    REQUIRE(modifierValid2->valid);
+
+    modifierValid->reset();
+    modifierInvalid->reset();
+    modifierValid2->reset();
+
+    generator.enableModifier("modifierInvalid");
+    REQUIRE_FALSE(generator.applyModifiers(surface));
+
+    REQUIRE(modifierValid->valid);
+    REQUIRE(modifierInvalid->valid);
+    REQUIRE_FALSE(modifierValid2->called);
 }

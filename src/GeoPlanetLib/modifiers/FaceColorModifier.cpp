@@ -9,7 +9,7 @@ FaceColorModifier::FaceColorModifier()
 {
 }
 
-bool FaceColorModifier::apply(Surface surface)
+bool FaceColorModifier::apply(std::shared_ptr<Surface> surface)
 {
 	return true;
 }

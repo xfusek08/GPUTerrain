@@ -9,7 +9,7 @@ RandomColorModifier::RandomColorModifier()
 {
 }
 
-bool RandomColorModifier::apply(Surface surface)
+bool RandomColorModifier::apply(std::shared_ptr<Surface> surface)
 {
 	return true;
 }

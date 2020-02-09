@@ -15,7 +15,7 @@ namespace gp
         public:
             RandomColorModifier();
 
-            virtual bool apply(Surface surface) override;
+            virtual bool apply(std::shared_ptr<Surface> surface) override;
         };
 
         REGISTER_AF_TYPE(RandomColorModifier, SurfaceModifier);

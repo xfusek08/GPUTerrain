@@ -1,8 +1,6 @@
 #pragma once
 
 #include <memory>
-#include <string>
-#include <map>
 
 #include <GeoPlanetLib/geoplanetlib_export.h>
 
@@ -13,7 +11,7 @@ namespace gp
 {
     class GEOPLANETLIB_EXPORT SurfaceModifier : public AbstractFactoryBase<SurfaceModifier>
     {
-        public:
-            virtual bool apply(Surface surface) = 0;
+    public:
+        virtual bool apply(std::shared_ptr<Surface> surface) = 0;
     };
 }

@@ -76,9 +76,15 @@ bool SurfaceGenerator::enableModifier(string ident)
 
 bool SurfaceGenerator::applyModifiers(shared_ptr<Surface> surface)
 {
-    return false;
+    for (auto modifierItem : modifierList) {
+        if (modifierItem.enabled) {
+            if (!modifierItem.modifier->apply(surface)) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
-
 
 shared_ptr<Surface> SurfaceGenerator::generate(unsigned int resolution)
 {

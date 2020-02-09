@@ -9,7 +9,7 @@ JitterModifier::JitterModifier()
 {
 }
 
-bool JitterModifier::apply(Surface surface)
+bool JitterModifier::apply(std::shared_ptr<Surface> surface)
 {
 	return true;
 }
