@@ -1,21 +1,33 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 #include <GeoPlanetLib/geoplanetlib_export.h>
 
 namespace gp
 {
-    enum class RegionAttributeType
-    {
+    // types
+    enum class RegionAttributeType {
         TectonicPlate,
         Elevation,
         Color
     };
 
+    typedef union {
+        float scalar;
+        glm::vec3 vector3;
+    } RegionAttributeData;
+
+    /**
+     * @Todo: maybe make an abstract factory ...
+     */
     class GEOPLANETLIB_EXPORT RegionAttribute
     {
-    public: // propertires
-    private: // propertires
-    public: // methods
-    private: // methods
+    public:
+        // propertires
+         RegionAttributeData data;
+
+        // methods
+		RegionAttribute() {}
     };
 }

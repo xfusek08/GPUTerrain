@@ -26,6 +26,10 @@ class AbstractFactoryBase
     public:
 		static std::shared_ptr<T> create(const std::string& name)
         {
+			if (factoriesMap.find(name) == factoriesMap.end()) {
+				return nullptr;
+			}
+
             return factoriesMap[name]->create();
         }
 

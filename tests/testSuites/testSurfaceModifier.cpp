@@ -10,5 +10,5 @@ TEST_CASE("testModifierAF") {
     REQUIRE(factoryName.size() > 0);
     auto modifier = SurfaceModifier::create(factoryName[0]);
     REQUIRE(modifier != nullptr);
-	REQUIRE(modifier->apply(Surface(0)));
+	REQUIRE(modifier->apply(Surface()));
 }

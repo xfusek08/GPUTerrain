@@ -6,6 +6,7 @@ add_executable(gp_tests
     catch.hpp
     testSuites/testSurface.cpp
     testSuites/testSurfaceModifier.cpp
+    testSuites/testSurfaceGenerator.cpp
 )
 
 target_include_directories(gp_tests

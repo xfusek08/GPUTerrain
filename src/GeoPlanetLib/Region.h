@@ -2,23 +2,25 @@
 
 #include <map>
 
-#include <GeoPlanetLib/geoplanetlib_export.h>
-
-#include <GeoPlanetLib/CoordinateTypes.h>
+#include <GeoPlanetLib/SurfacePosition.h>
 #include <GeoPlanetLib/RegionAttribute.h>
+#include <GeoPlanetLib/geoplanetlib_export.h>
 
 namespace gp
 {
-    class Region
+    class GEOPLANETLIB_EXPORT Region
     {
-    public: // propertires
-    private: // propertires
-		RegionID id = INVALID_REGION_ID;
+    public:
+        // propertires
         std::map<RegionAttributeType, RegionAttribute> attributes;
 
-    public: // methods
-		Region(RegionID id) { this->id = id; }
+        // methods
+		Region(SurfacePosition position) : position(position) {}
 
-    private: // methods
+        inline RegionID        getId()       const { return position.getRegionID(); }
+        inline SurfacePosition getPosition() const { return position; }
+
+    private:
+        SurfacePosition position;
     };
 }

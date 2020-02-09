@@ -1,16 +1,25 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
+#include <GeoPlanetLib/CoordinateTypes.h>
+
 namespace gp
 {
     class CoordinateSystem
     {
-        private:
-            unsigned int resolution;
-        public:
-            CoordinateSystem(unsigned int resolution);
+    public:
+        // methods
+        CoordinateSystem(unsigned int resolution);
 
-            inline unsigned int getResolution() { return resolution; }
+        /** Returns resolution of the system. */
+        inline unsigned int getResolution() const { return resolution; }
 
-			unsigned int totalRegionCount();
+        /** Returns total number of regions on surface. */
+		inline unsigned int getTotalRegionCount() const { return resolution * resolution * 6; }
+
+    private:
+        // properties
+        unsigned int resolution;
     };
 }

@@ -3,12 +3,9 @@
 
 using namespace gp;
 
-CoordinateSystem::CoordinateSystem(unsigned int resolution)
+CoordinateSystem::CoordinateSystem(unsigned int resolution) : resolution(resolution)
 {
-    this->resolution = resolution;
-}
-
-unsigned int CoordinateSystem::totalRegionCount()
-{
-    return this->resolution * this->resolution * 6;
+    if (resolution <= 0) {
+        throw "CoordinateSystem: invalid resolution value. Resolution must be greater than 0";
+    }
 }
