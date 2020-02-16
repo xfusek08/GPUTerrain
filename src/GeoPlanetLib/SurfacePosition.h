@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include <glm/glm.hpp>
 
 #include <GeoPlanetLib/geoplanetlib_export.h>
@@ -8,6 +10,26 @@
 
 namespace gp
 {
+    struct RegionNeighborhood
+    {
+        static const unsigned int SIZE = 8;
+
+        RegionID
+            up        = INVALID_REGION_ID,
+            upLeft    = INVALID_REGION_ID,
+            left      = INVALID_REGION_ID,
+            downLeft  = INVALID_REGION_ID,
+            down      = INVALID_REGION_ID,
+            downRight = INVALID_REGION_ID,
+            right     = INVALID_REGION_ID,
+            upRight   = INVALID_REGION_ID;
+
+        std::array<RegionID, RegionNeighborhood::SIZE> each() const
+        {
+            return { up, upLeft, left, downLeft, down, downRight, right, upRight };
+        }
+    };
+
     /**
      * @brief A class providing correct geometrical transformations on surface of the cubesphere
      */
@@ -17,17 +39,20 @@ namespace gp
         SurfacePosition(CoordinateSystem coordinateSystem, RegionID regionId, glm::vec2 localOffset = glm::vec2(0.5, 0.5))
             : coordinateSystem(coordinateSystem), regionId(regionId), localOffset(localOffset) {}
 
-        SurfacePosition(CoordinateSystem coordinateSystem, FaceID faceId, glm::vec2 localCoordition)
-            : coordinateSystem(coordinateSystem) { setLocal(localCoordition, faceId); }
+        SurfacePosition(CoordinateSystem coordinateSystem, FaceID faceId, glm::vec2 localCoords)
+            : coordinateSystem(coordinateSystem) { setLocal(localCoords, faceId); }
 
-        SurfacePosition(CoordinateSystem coordinateSystem, glm::vec3 globalCoordition)
-            : coordinateSystem(coordinateSystem) { setGlobal(globalCoordition); }
+        SurfacePosition(CoordinateSystem coordinateSystem, glm::vec3 globalPosition)
+            : coordinateSystem(coordinateSystem) { setGlobal(globalPosition); }
 
         /// Id of current region
-        inline RegionID  getRegionID()    const { return regionId; }
+        inline RegionID  getRegionID() const { return regionId; }
 
         /// A 2d position in current region from top left corner from 0 to 1
         inline glm::vec2 getLocalOffset() const { return localOffset; }
+
+        // Coordinate system of attached surface
+        inline CoordinateSystem getCoordinateSystem() const { return coordinateSystem; }
 
         // calculated getters
 
@@ -36,6 +61,8 @@ namespace gp
         glm::vec2  getLocal()            const; ///< A 2d position in current face from top left corner from 0 to 1
         glm::vec2  getLocalWarped()      const; ///< A 2d position in current face warped for normalization
         glm::uvec2 getFaceGridPosition() const; ///< A 2d integer index in face grid.
+
+        RegionNeighborhood getNeighborhood() const;
 
         //setters
 

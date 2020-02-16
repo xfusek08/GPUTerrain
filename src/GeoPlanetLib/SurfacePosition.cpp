@@ -29,6 +29,23 @@ glm::uvec2 SurfacePosition::getFaceGridPosition() const
     return coordinateSystem.regionIdToGridCoords(regionId);
 }
 
+RegionNeighborhood SurfacePosition::getNeighborhood() const
+{
+    auto gridCoords = getFaceGridPosition();
+    auto faceId = getFaceID();
+    return {
+        coordinateSystem.localPosToRegion(faceId, gridCoords + glm::uvec2(0, -1)),  // 0 - up
+        coordinateSystem.localPosToRegion(faceId, gridCoords + glm::uvec2(-1, -1)), // 1 - upLeft
+        coordinateSystem.localPosToRegion(faceId, gridCoords + glm::uvec2(-1, 0)),  // 2 - left
+        coordinateSystem.localPosToRegion(faceId, gridCoords + glm::uvec2(-1, 1)),  // 3 - downLeft
+        coordinateSystem.localPosToRegion(faceId, gridCoords + glm::uvec2(0, 1)),   // 4 - down
+        coordinateSystem.localPosToRegion(faceId, gridCoords + glm::uvec2(1, 1)),   // 5 - downRight
+        coordinateSystem.localPosToRegion(faceId, gridCoords + glm::uvec2(1, 0)),   // 6 - right
+        coordinateSystem.localPosToRegion(faceId, gridCoords + glm::uvec2(1, -1)),  // 7 - upRight
+    };
+}
+
+
 void SurfacePosition::setGlobal(glm::vec3 gPos)
 {
     LocalPosition lPos = coordinateSystem.globalToLocalPos(gPos);

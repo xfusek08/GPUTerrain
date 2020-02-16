@@ -37,6 +37,7 @@ set(SOURCES
     src/${PROJECT_NAME}/SurfacePosition.h  src/${PROJECT_NAME}/SurfacePosition.cpp
     src/${PROJECT_NAME}/RegionAttribute.h
     src/${PROJECT_NAME}/Region.h
+    src/${PROJECT_NAME}/TectonicPlate.h    src/${PROJECT_NAME}/TectonicPlate.cpp
     src/${PROJECT_NAME}/Surface.h          src/${PROJECT_NAME}/Surface.cpp
     src/${PROJECT_NAME}/SurfaceModifier.h  src/${PROJECT_NAME}/SurfaceModifier.cpp
     src/${PROJECT_NAME}/SurfaceGenerator.h src/${PROJECT_NAME}/SurfaceGenerator.cpp
@@ -44,9 +45,11 @@ set(SOURCES
 
 set(SOURCES_MODIFIERS
     src/${PROJECT_NAME}/modifiers/modifiers.h
-    src/${PROJECT_NAME}/modifiers/RandomColorModifier.h  src/${PROJECT_NAME}/modifiers/RandomColorModifier.cpp
-    src/${PROJECT_NAME}/modifiers/JitterModifier.h       src/${PROJECT_NAME}/modifiers/JitterModifier.cpp
-    src/${PROJECT_NAME}/modifiers/FaceColorModifier.h    src/${PROJECT_NAME}/modifiers/FaceColorModifier.cpp
+    src/${PROJECT_NAME}/modifiers/ColorModifier.h         src/${PROJECT_NAME}/modifiers/ColorModifier.cpp
+    src/${PROJECT_NAME}/modifiers/RandomColorModifier.h   src/${PROJECT_NAME}/modifiers/RandomColorModifier.cpp
+    src/${PROJECT_NAME}/modifiers/JitterModifier.h        src/${PROJECT_NAME}/modifiers/JitterModifier.cpp
+    src/${PROJECT_NAME}/modifiers/FaceColorModifier.h     src/${PROJECT_NAME}/modifiers/FaceColorModifier.cpp
+    src/${PROJECT_NAME}/modifiers/TectonicPlateModifier.h src/${PROJECT_NAME}/modifiers/TectonicPlateModifier.cpp
 )
 
 source_group("${PROJECT_NAME}"            FILES ${SOURCES})

@@ -45,35 +45,50 @@ LocalPosition CoordinateSystem::globalToLocalPos(vec3 gPos) const
     return {faceId, lCoords};
 }
 
+LocalPosition CoordinateSystem::gridCoordsToLocalPosition(FaceID faceId, glm::ivec2 gridCoords) const
+{
+    float halfStep = 0.5f / float(resolution);
+    float fullstep = 2 * halfStep;
+    return {
+        faceId,
+        vec2(
+            halfStep + float(gridCoords.x) * fullstep,
+            halfStep + float(gridCoords.y) * fullstep
+        )
+    };
+}
+
 RegionID CoordinateSystem::localPosToRegion(LocalPosition lPos, glm::vec2 *offsetReference, bool allowWrap) const
 {
-    RegionID regionId;
-    int x = lPos.coords.x * float(resolution);
-    int y = lPos.coords.y * float(resolution);
-
     // coordinates are within the face
-    if (x >= 0 && x < resolution && y >= 0 && y < resolution) {
-        regionId = (lPos.faceId * resolution * resolution) + (resolution * y) + x;
-    } else if (!allowWrap) {
+    if (lPos.coords.x >= 0 && lPos.coords.x < 1.0f 
+		&& lPos.coords.y >= 0 && lPos.coords.y < 1.0f
+	) {
+		int x = lPos.coords.x * float(resolution);
+		int y = lPos.coords.y * float(resolution);
+		RegionID regionId = (lPos.faceId * resolution * resolution) + (resolution * y) + x;
+
+		// compute local offset
+		if (offsetReference != nullptr) {
+			float step = 1.0f / float(resolution);
+			*offsetReference = float(resolution) * vec2(
+				lPos.coords.x - (step * x),
+				lPos.coords.y - (step * y)
+			);
+		}
+		return regionId;
+	}
+	
+	if (!allowWrap) {
         return INVALID_REGION_ID;
-    } else {
-        lPos = wrapLocalPosition(lPos);
-        if (lPos.faceId == FaceID::FACE_INVALID) {
-            return INVALID_REGION_ID;
-        }
-        return localPosToRegion(lPos, offsetReference, false);
+    } 
+
+    lPos = wrapLocalPosition(lPos);
+    if (lPos.faceId == FaceID::FACE_INVALID) {
+        return INVALID_REGION_ID;
     }
 
-    // compute local offset
-    if (offsetReference != nullptr) {
-        float step = 1.0f / float(resolution);
-        *offsetReference = float(resolution) * vec2(
-            lPos.coords.x - (step * x),
-            lPos.coords.x - (step * y)
-        );
-    }
-
-    return regionId;
+    return localPosToRegion(lPos, offsetReference, false);
 }
 
 LocalPosition CoordinateSystem::wrapLocalPosition(LocalPosition lPos) const
@@ -100,9 +115,9 @@ LocalPosition CoordinateSystem::wrapLocalPosition(LocalPosition lPos) const
     }
 }
 
-uvec2 CoordinateSystem::regionIdToGridCoords(RegionID regionId) const
+ivec2 CoordinateSystem::regionIdToGridCoords(RegionID regionId) const
 {
-    return uvec2(
+    return ivec2(
         regionId % resolution,
         unsigned(float(regionId) / float(resolution)) % resolution
     );

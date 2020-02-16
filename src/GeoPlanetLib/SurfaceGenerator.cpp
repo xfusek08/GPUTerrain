@@ -77,13 +77,26 @@ bool SurfaceGenerator::enableModifier(string ident)
 bool SurfaceGenerator::applyModifiers(shared_ptr<Surface> surface)
 {
     for (auto modifierItem : modifierList) {
-        if (modifierItem.enabled) {
-            if (!modifierItem.modifier->apply(surface)) {
-                return false;
-            }
+        if (!applyModifierItem(surface, modifierItem)) {
+            return false;
         }
     }
     return true;
+}
+
+bool SurfaceGenerator::applyModifierItem(std::shared_ptr<Surface> surface, ModifierListItem modifierItem)
+{
+    if (modifierItem.enabled) {
+        if (!applyModifier(surface, modifierItem.modifier)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool SurfaceGenerator::applyModifier(std::shared_ptr<Surface> surface, std::shared_ptr<SurfaceModifier> modifier)
+{
+    return modifier->apply(surface);
 }
 
 shared_ptr<Surface> SurfaceGenerator::generate(unsigned int resolution)

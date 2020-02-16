@@ -5,10 +5,6 @@
 using namespace gp;
 using namespace gp::modifiers;
 
-RandomColorModifier::RandomColorModifier()
-{
-}
-
 bool RandomColorModifier::apply(std::shared_ptr<Surface> surface)
 {
 	for (auto region : surface->getRegions()) {

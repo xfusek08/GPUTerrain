@@ -10,14 +10,18 @@ namespace gp
 {
     namespace modifiers
     {
-        class GEOPLANETLIB_EXPORT RandomColorModifier : public SurfaceModifier
+        class GEOPLANETLIB_EXPORT ColorModifier : public SurfaceModifier
         {
         public:
-            RandomColorModifier() {}
+            // properties
+            glm::uvec3 color = glm::uvec3(255, 255, 255);
+
+            // methods
+            ColorModifier() {}
 
             virtual bool apply(std::shared_ptr<Surface> surface) override;
         };
 
-        REGISTER_AF_TYPE(RandomColorModifier, SurfaceModifier);
+        REGISTER_AF_TYPE(ColorModifier, SurfaceModifier);
     }
 }

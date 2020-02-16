@@ -38,6 +38,8 @@ namespace gp
         /** Converts global space position on unit sphere to local face position. */
         LocalPosition globalToLocalPos(glm::vec3 gPos) const;
 
+        LocalPosition gridCoordsToLocalPosition(FaceID faceId, glm::ivec2 gridCoords) const;
+
         /**
          * @brief Calculates region id and region inner offset from local face position.
          *
@@ -47,6 +49,10 @@ namespace gp
          * @return RegionID Resultign region id possible on a new face.
          */
         RegionID localPosToRegion(LocalPosition lPos, glm::vec2 *offsetReference = nullptr, bool allowWrap = true) const;
+        inline RegionID localPosToRegion(FaceID faceId, glm::uvec2 gridCoords, bool allowWrap = true) const
+        {
+            return localPosToRegion(gridCoordsToLocalPosition(faceId, gridCoords), nullptr, allowWrap);
+        }
 
         /**
          * @brief perform and wrap operation on LocalPosition if necessary
@@ -57,7 +63,7 @@ namespace gp
         LocalPosition wrapLocalPosition(LocalPosition lPos) const;
 
         /** @brief Returns x, y grid coordinates for region id. */
-		glm::uvec2 regionIdToGridCoords(RegionID regionId) const;
+		glm::ivec2 regionIdToGridCoords(RegionID regionId) const;
 
         /** @brief Returns local face position of topleft corner of region */
 		LocalPosition regionIdToLocalPos(RegionID regionId) const;

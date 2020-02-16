@@ -43,6 +43,10 @@ namespace gp
         bool enableModifier(std::string ident);
 
         bool applyModifiers(std::shared_ptr<Surface> surface);
+        bool applyModifier(std::shared_ptr<Surface> surface, std::shared_ptr<SurfaceModifier> modifier);
+        bool applyModifierItem(std::shared_ptr<Surface> surface, ModifierListItem modifierItem);
+
+        inline bool applyModifier(std::shared_ptr<Surface> surface, std::string ident) { return applyModifierItem(surface, getModifier(ident)); }
 
         std::shared_ptr<Surface> generate(unsigned int resolution = 0);
 

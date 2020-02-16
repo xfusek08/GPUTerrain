@@ -6,6 +6,9 @@
 
 namespace gp
 {
+    // forward declaration
+    class TectonicPlate;
+
     // types
     enum class RegionAttributeType {
         TectonicPlate,
@@ -17,6 +20,7 @@ namespace gp
         float scalar;
         glm::vec3 vector3;
         glm::uvec3 uVector3;
+        TectonicPlate *plate;
     } RegionAttributeData;
 
     /**
