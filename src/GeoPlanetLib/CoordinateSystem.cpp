@@ -40,8 +40,8 @@ LocalPosition CoordinateSystem::globalToLocalPos(vec3 gPos) const
 {
     FaceID faceId = faceFromGlobalPos(gPos);
     mat3 pt = facePermutationMatrix(faceId);
-    vec2 wlCoords = makeLocal2D(gPos * pt);
-    vec2 lCoords = unwarp(wlCoords);
+    vec2 lCoords = makeLocal2D(gPos * pt);
+    // lCoords = unwarp(lCoords);
     return {faceId, lCoords};
 }
 

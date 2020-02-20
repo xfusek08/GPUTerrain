@@ -27,7 +27,7 @@ namespace gp
 
         private:
             // properties
-            float jitter = 1.0;
+            float jitter = 0.5;
 
             // methods
             float rand_f() const;            ///< Generates random float value from 0.0 to 1.0
