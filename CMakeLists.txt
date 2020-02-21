@@ -45,10 +45,7 @@ set(SOURCES
 
 set(SOURCES_MODIFIERS
     src/${PROJECT_NAME}/modifiers/modifiers.h
-    src/${PROJECT_NAME}/modifiers/ColorModifier.h         src/${PROJECT_NAME}/modifiers/ColorModifier.cpp
-    src/${PROJECT_NAME}/modifiers/RandomColorModifier.h   src/${PROJECT_NAME}/modifiers/RandomColorModifier.cpp
     src/${PROJECT_NAME}/modifiers/JitterModifier.h        src/${PROJECT_NAME}/modifiers/JitterModifier.cpp
-    src/${PROJECT_NAME}/modifiers/FaceColorModifier.h     src/${PROJECT_NAME}/modifiers/FaceColorModifier.cpp
     src/${PROJECT_NAME}/modifiers/TectonicPlateModifier.h src/${PROJECT_NAME}/modifiers/TectonicPlateModifier.cpp
 )
 

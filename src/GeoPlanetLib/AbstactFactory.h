@@ -20,33 +20,33 @@ public:
 template<class T>
 class AbstractFactoryBase
 {
-    private:
-        static std::map<std::string, AbstractFactorySpecific<T>*> factoriesMap;
+private:
+    static std::map<std::string, AbstractFactorySpecific<T>*> factoriesMap;
 
-    public:
-		static std::shared_ptr<T> create(const std::string& name)
-        {
-			if (factoriesMap.find(name) == factoriesMap.end()) {
-				return nullptr;
-			}
-
-            return factoriesMap[name]->create();
+public:
+    static std::shared_ptr<T> create(const std::string& name)
+    {
+        if (factoriesMap.find(name) == factoriesMap.end()) {
+            return nullptr;
         }
 
-		static void registerType(const std::string& name, AbstractFactorySpecific<T>* factory)
-        {
-            factoriesMap[name] = factory;
-        }
+        return factoriesMap[name]->create();
+    }
 
-		static std::vector<std::string> list()
-        {
-            std::vector<std::string> result;
-            result.reserve(factoriesMap.size());
-            for(auto const& item: factoriesMap) {
-                result.push_back(item.first);
-            }
-            return result;
+    static void registerType(const std::string& name, AbstractFactorySpecific<T>* factory)
+    {
+        factoriesMap[name] = factory;
+    }
+
+    static std::vector<std::string> list()
+    {
+        std::vector<std::string> result;
+        result.reserve(factoriesMap.size());
+        for(auto const& item: factoriesMap) {
+            result.push_back(item.first);
         }
+        return result;
+    }
 };
 
 #define DEFINE_AF_BASE_STORAGE(type) std::map<std::string, AbstractFactorySpecific<type>*> type::factoriesMap;

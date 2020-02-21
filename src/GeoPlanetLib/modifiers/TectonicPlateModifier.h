@@ -28,12 +28,8 @@ namespace gp
             virtual bool apply(std::shared_ptr<Surface> surface) override;
             bool stepExpandPlates(std::shared_ptr<Surface> surface);
             bool expandStep(std::shared_ptr<Surface> surface);
-            void applyStateAsRegionColors(std::shared_ptr<Surface> surface);
 
         private:
-            // properties
-            std::map<gp::TectonicPlate *, glm::uvec3> colorMap;
-
             // methods
             void runPlateFloddFill(std::shared_ptr<Surface> surface);
         };

@@ -15,7 +15,6 @@ using namespace std;
  */
 bool TectonicPlateModifier::apply(std::shared_ptr<Surface> surface)
 {
-    colorMap.clear();
     surface->plates.clear();
     TectonicPlate::removePlatesFromSurface(surface);
 
@@ -29,11 +28,6 @@ bool TectonicPlateModifier::apply(std::shared_ptr<Surface> surface)
         auto tectonicPlate = make_shared<TectonicPlate>(surface);
         auto randomIndex = distr(eng) % regions.size();
         tectonicPlate->addRegion(regions[randomIndex]);
-        colorMap[tectonicPlate.get()] = glm::uvec3(
-            rand() % 255,
-            rand() % 255,
-            rand() % 255
-        );
         surface->plates.push_back(tectonicPlate);
     }
 
@@ -62,16 +56,4 @@ bool TectonicPlateModifier::stepExpandPlates(std::shared_ptr<Surface> surface)
         }
     }
 	return expansionFinished;
-}
-
-void TectonicPlateModifier::applyStateAsRegionColors(std::shared_ptr<Surface> surface)
-{
-    for (auto plate : surface->plates) {
-        for (auto region : plate->getMemberRegions()) {
-            region->attributes[RegionAttributeType::Color].data.uVector3 = glm::mix(colorMap[plate.get()], glm::uvec3(255,255,255), 0.5);
-        }
-        for (auto region : plate->getEdgeRegions()) {
-            region->attributes[RegionAttributeType::Color].data.uVector3 = colorMap[plate.get()];
-        }
-    }
 }

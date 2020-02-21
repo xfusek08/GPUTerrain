@@ -1,6 +1,9 @@
 #pragma once
 
 #include <memory>
+
+#include <GeoPlanetLib/geoplanetlib_export.h>
+
 #include <GeoPlanetLib/Region.h>
 
 namespace gp
@@ -9,7 +12,7 @@ namespace gp
 
     typedef std::vector<std::shared_ptr<TectonicPlate>> PlateList;
 
-    class TectonicPlate
+    class GEOPLANETLIB_EXPORT TectonicPlate
     {
     public:
 
