@@ -15,7 +15,7 @@ namespace gp
         {
         public:
             // methods
-            JitterModifier();
+            JitterModifier() {}
 
             inline float getJitter() { return jitter; }
 
@@ -27,7 +27,7 @@ namespace gp
 
         private:
             // properties
-            float jitter = 0.5;
+            float jitter = 1.0f;
 
             // methods
             float rand_f() const;            ///< Generates random float value from 0.0 to 1.0

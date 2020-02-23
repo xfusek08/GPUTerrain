@@ -31,12 +31,12 @@ set(DEFAULT_RESOERCES_PATH "${CMAKE_CURRENT_LIST_DIR}/resources")
 set(${APP_NAME}_RESOURCES  "${DEFAULT_RESOERCES_PATH}" CACHE PATH "Relative or absolute path to Application resources.")
 
 set(SOURCES
+    src/${PROJECT_NAME}/Utils.h
     src/${PROJECT_NAME}/AbstactFactory.h
     src/${PROJECT_NAME}/CoordinateTypes.h
     src/${PROJECT_NAME}/CoordinateSystem.h src/${PROJECT_NAME}/CoordinateSystem.cpp
     src/${PROJECT_NAME}/SurfacePosition.h  src/${PROJECT_NAME}/SurfacePosition.cpp
-    src/${PROJECT_NAME}/RegionAttribute.h
-    src/${PROJECT_NAME}/Region.h
+    src/${PROJECT_NAME}/Region.h           src/${PROJECT_NAME}/Region.cpp
     src/${PROJECT_NAME}/TectonicPlate.h    src/${PROJECT_NAME}/TectonicPlate.cpp
     src/${PROJECT_NAME}/Surface.h          src/${PROJECT_NAME}/Surface.cpp
     src/${PROJECT_NAME}/SurfaceModifier.h  src/${PROJECT_NAME}/SurfaceModifier.cpp
@@ -47,6 +47,7 @@ set(SOURCES_MODIFIERS
     src/${PROJECT_NAME}/modifiers/modifiers.h
     src/${PROJECT_NAME}/modifiers/JitterModifier.h        src/${PROJECT_NAME}/modifiers/JitterModifier.cpp
     src/${PROJECT_NAME}/modifiers/TectonicPlateModifier.h src/${PROJECT_NAME}/modifiers/TectonicPlateModifier.cpp
+    src/${PROJECT_NAME}/modifiers/ElevationModifier.h     src/${PROJECT_NAME}/modifiers/ElevationModifier.cpp
 )
 
 source_group("${PROJECT_NAME}"            FILES ${SOURCES})

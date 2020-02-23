@@ -33,7 +33,7 @@ namespace gp
 		FaceID faceIdFromRegionId(RegionID RegionID) const;
 
         /** Converts local face position to global space position on unit sphere. */
-        glm::vec3 localToGlobalPos(LocalPosition lPos) const;
+        glm::vec3 localToGlobalPos(LocalPosition lPos, bool doWarp = true) const;
 
         /** Converts global space position on unit sphere to local face position. */
         LocalPosition globalToLocalPos(glm::vec3 gPos) const;

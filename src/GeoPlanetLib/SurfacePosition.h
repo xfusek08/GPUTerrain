@@ -56,11 +56,11 @@ namespace gp
 
         // calculated getters
 
-        FaceID     getFaceID()           const; ///< id of current face
-        glm::vec3  getGlobal()           const; ///< A 3d position on surface of unit sphere.
-        glm::vec2  getLocal()            const; ///< A 2d position in current face from top left corner from 0 to 1
-        glm::vec2  getLocalWarped()      const; ///< A 2d position in current face warped for normalization
-        glm::uvec2 getFaceGridPosition() const; ///< A 2d integer index in face grid.
+        FaceID     getFaceID()                   const; ///< id of current face
+        glm::vec3  getGlobal(bool doWarp = true) const; ///< A 3d position on surface of unit sphere.
+        glm::vec2  getLocal()                    const; ///< A 2d position in current face from top left corner from 0 to 1
+        glm::vec2  getLocalWarped()              const; ///< A 2d position in current face warped for normalization
+        glm::uvec2 getFaceGridPosition()         const; ///< A 2d integer index in face grid.
 
         RegionNeighborhood getNeighborhood() const;
 

@@ -28,9 +28,9 @@ vec2 CoordinateSystem::unwarp(vec2 wlCoords) const
 	return makeLocal2D(res);
 }
 
-vec3 CoordinateSystem::localToGlobalPos(LocalPosition lPos) const
+vec3 CoordinateSystem::localToGlobalPos(LocalPosition lPos, bool doWarp) const
 {
-    vec2 wlCoords = warp(lPos.coords);
+    vec2 wlCoords = doWarp ? warp(lPos.coords) : lPos.coords;
     vec3 p = makeLocal3D(wlCoords);
     mat3 pt = facePermutationMatrix(lPos.faceId);
     return normalize(pt * p);
@@ -61,7 +61,7 @@ LocalPosition CoordinateSystem::gridCoordsToLocalPosition(FaceID faceId, glm::iv
 RegionID CoordinateSystem::localPosToRegion(LocalPosition lPos, glm::vec2 *offsetReference, bool allowWrap) const
 {
     // coordinates are within the face
-    if (lPos.coords.x >= 0 && lPos.coords.x < 1.0f 
+    if (lPos.coords.x >= 0 && lPos.coords.x < 1.0f
 		&& lPos.coords.y >= 0 && lPos.coords.y < 1.0f
 	) {
 		int x = lPos.coords.x * float(resolution);
@@ -78,10 +78,10 @@ RegionID CoordinateSystem::localPosToRegion(LocalPosition lPos, glm::vec2 *offse
 		}
 		return regionId;
 	}
-	
+
 	if (!allowWrap) {
         return INVALID_REGION_ID;
-    } 
+    }
 
     lPos = wrapLocalPosition(lPos);
     if (lPos.faceId == FaceID::FACE_INVALID) {

@@ -1,15 +1,15 @@
 
-#include <GeoPlanetLib/RegionAttribute.h>
 #include <GeoPlanetLib/TectonicPlate.h>
 #include <GeoPlanetLib/Surface.h>
+#include <GeoPlanetLib/Utils.h>
 
 using namespace gp;
 
 TectonicPlate *TectonicPlate::getPlateOfRegion(std::shared_ptr<Region> region)
 {
-	auto item = region->attributes.find(RegionAttributeType::TectonicPlate);
-    if (item != region->attributes.end()) {
-		return item->second.data.plate;
+	auto attr = region->getAttribute(RegionAttributeType::TectonicPlate);
+    if (attr.isValid) {
+		return attr.data.plate;
     }
     return nullptr;
 }
@@ -22,7 +22,9 @@ bool TectonicPlate::assignPlateToRegion(TectonicPlate *plate, std::shared_ptr<Re
     }
 
     if (forceOverride || existingPlate == nullptr) {
-        region->attributes[RegionAttributeType::TectonicPlate].data.plate = plate;
+        RegionAttributeData data;
+        data.plate = plate;
+        region->setAttribute(RegionAttributeType::TectonicPlate, data);
         return true;
     }
     return false;
@@ -30,7 +32,7 @@ bool TectonicPlate::assignPlateToRegion(TectonicPlate *plate, std::shared_ptr<Re
 
 void TectonicPlate::removePlateFromRegion(std::shared_ptr<Region> region)
 {
-    region->attributes.erase(RegionAttributeType::TectonicPlate);
+    region->unsetAttribute(RegionAttributeType::TectonicPlate);
 }
 
 void TectonicPlate::removePlatesFromSurface(std::shared_ptr<Surface> surface)
@@ -38,6 +40,13 @@ void TectonicPlate::removePlatesFromSurface(std::shared_ptr<Surface> surface)
     for (auto region : surface->getRegions()) {
         TectonicPlate::removePlateFromRegion(region);
     }
+}
+
+TectonicPlate::TectonicPlate(std::shared_ptr<Surface> surface) :
+    elevation(rand_f(-0.5, 0.5)),
+    surface(surface)
+{
+
 }
 
 bool TectonicPlate::addRegion(std::shared_ptr<Region> region)

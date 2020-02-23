@@ -15,7 +15,6 @@ namespace gp
     class GEOPLANETLIB_EXPORT TectonicPlate
     {
     public:
-
         // static methods
         static TectonicPlate *getPlateOfRegion(std::shared_ptr<Region> region);
 
@@ -34,8 +33,11 @@ namespace gp
 
         static void removePlatesFromSurface(std::shared_ptr<Surface> surface);
 
+        // properties
+        float elevation;
+
         // Methods
-        TectonicPlate(std::shared_ptr<Surface> surface) : surface(surface) {}
+        TectonicPlate(std::shared_ptr<Surface> surface);
 
         inline const RegionList& getMemberRegions() const { return memberRegions; }
         inline const RegionList& getEdgeRegions() const { return edgeRegions; }

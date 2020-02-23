@@ -8,9 +8,9 @@ FaceID SurfacePosition::getFaceID() const
     return coordinateSystem.faceIdFromRegionId(regionId);
 }
 
-glm::vec3 SurfacePosition::getGlobal() const
+glm::vec3 SurfacePosition::getGlobal(bool doWarp) const
 {
-    return coordinateSystem.localToGlobalPos({ getFaceID(), getLocal() });
+    return coordinateSystem.localToGlobalPos({ getFaceID(), getLocal() }, doWarp);
 }
 
 glm::vec2 SurfacePosition::getLocal() const

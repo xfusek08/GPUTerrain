@@ -6,10 +6,6 @@ using namespace gp;
 using namespace gp::modifiers;
 using namespace glm;
 
-JitterModifier::JitterModifier()
-{
-}
-
 void JitterModifier::setJitter(float value)
 {
     if (value < 0) {
