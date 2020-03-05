@@ -45,7 +45,7 @@ LocalPosition CoordinateSystem::globalToLocalPos(vec3 gPos) const
     return {faceId, lCoords};
 }
 
-LocalPosition CoordinateSystem::gridCoordsToLocalPosition(FaceID faceId, glm::ivec2 gridCoords) const
+LocalPosition CoordinateSystem::gridCoordsToLocalPos(FaceID faceId, glm::ivec2 gridCoords) const
 {
     float halfStep = 0.5f / float(resolution);
     float fullstep = 2 * halfStep;

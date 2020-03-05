@@ -10,6 +10,22 @@
  * Inspired by: https://blog.noctua-software.com/object-factory-c++.html
  */
 
+#define REGISTER_AF_TYPE(t_specific,t_base)\
+	class t_specific##Factory : public AbstractFactorySpecific<t_base>\
+	{\
+		public:\
+			t_specific##Factory()\
+			{\
+				t_base::registerType(#t_specific, this);\
+			}\
+			virtual std::shared_ptr<t_base> create() override\
+			{\
+				return std::make_shared<t_specific>();\
+			}\
+	};\
+	static t_specific##Factory global_##t_specific##Factory
+
+
 template<class T>
 class AbstractFactorySpecific
 {
@@ -50,18 +66,3 @@ public:
 };
 
 #define DEFINE_AF_BASE_STORAGE(type) std::map<std::string, AbstractFactorySpecific<type>*> type::factoriesMap;
-
-#define REGISTER_AF_TYPE(t_specific,t_base)\
-	class t_specific##Factory : public AbstractFactorySpecific<t_base>\
-	{\
-		public:\
-			t_specific##Factory()\
-			{\
-				t_base::registerType(#t_specific, this);\
-			}\
-			virtual std::shared_ptr<t_base> create() override\
-			{\
-				return std::make_shared<t_specific>();\
-			}\
-	};\
-	static t_specific##Factory global_##t_specific##Factory

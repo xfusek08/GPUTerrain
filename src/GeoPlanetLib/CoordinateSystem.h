@@ -38,7 +38,7 @@ namespace gp
         /** Converts global space position on unit sphere to local face position. */
         LocalPosition globalToLocalPos(glm::vec3 gPos) const;
 
-        LocalPosition gridCoordsToLocalPosition(FaceID faceId, glm::ivec2 gridCoords) const;
+        LocalPosition gridCoordsToLocalPos(FaceID faceId, glm::ivec2 gridCoords) const;
 
         /**
          * @brief Calculates region id and region inner offset from local face position.
@@ -51,7 +51,7 @@ namespace gp
         RegionID localPosToRegion(LocalPosition lPos, glm::vec2 *offsetReference = nullptr, bool allowWrap = true) const;
         inline RegionID localPosToRegion(FaceID faceId, glm::uvec2 gridCoords, bool allowWrap = true) const
         {
-            return localPosToRegion(gridCoordsToLocalPosition(faceId, gridCoords), nullptr, allowWrap);
+            return localPosToRegion(gridCoordsToLocalPos(faceId, gridCoords), nullptr, allowWrap);
         }
 
         /**
