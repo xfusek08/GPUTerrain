@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <glm/glm.hpp>
 
 /**
  * Generates random float value from 0.0 to 1.0
@@ -25,4 +26,9 @@ float rand_f(float from, float to)
     }
     auto res = rand_f(to - from);
     return res + from;
+}
+
+inline glm::vec3 randomUnitVector3()
+{
+    return glm::normalize(glm::vec3(rand_f(-1,1), rand_f(-1,1), rand_f(-1,1)));
 }

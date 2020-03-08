@@ -5,6 +5,10 @@
 
 using namespace gp;
 
+// ============================================================================
+// STATIC
+// ============================================================================
+
 TectonicPlate *TectonicPlate::getPlateOfRegion(std::shared_ptr<Region> region)
 {
 	auto attr = region->getAttribute(RegionAttributeType::TectonicPlate);
@@ -42,11 +46,16 @@ void TectonicPlate::removePlatesFromSurface(std::shared_ptr<Surface> surface)
     }
 }
 
+// ============================================================================
+// NON STATIC
+// ============================================================================
+
 TectonicPlate::TectonicPlate(std::shared_ptr<Surface> surface) :
     elevation(rand_f(-0.5, 0.5)),
+    center(glm::vec3(0)),
+    shiftVector(glm::vec3(0)),
     surface(surface)
 {
-
 }
 
 bool TectonicPlate::addRegion(std::shared_ptr<Region> region)
@@ -57,12 +66,13 @@ bool TectonicPlate::addRegion(std::shared_ptr<Region> region)
 
     memberRegions.push_back(region);
     edgeRegions.push_back(region);
+    center = glm::vec3(0);
     return true;
 }
 
 bool TectonicPlate::expand()
 {
-    if (expansionFinished) {
+    if (isExpansionFinished()) {
         return false;
     }
 
@@ -92,6 +102,40 @@ bool TectonicPlate::expand()
 			++actIndex;
 		}
     }
-    expansionFinished = !regionAdded;
+
+    if (!regionAdded) {
+        finishExpansion();
+    }
+
     return regionAdded;
+}
+
+void TectonicPlate::finishExpansion()
+{
+    expansionFinished = true;
+    computeRamdomShift();
+}
+
+glm::vec3 TectonicPlate::getCenter()
+{
+    if (center == glm::vec3(0) && edgeRegions.size() > 0) {
+        for (auto region : edgeRegions) {
+            center += region->position.getGlobal();
+        }
+        center = glm::normalize(center);
+    }
+    return center;
+}
+
+void TectonicPlate::computeRamdomShift()
+{
+    auto center = getCenter();
+    if (center == glm::vec3(0)) {
+        shiftVector = glm::vec3(0);
+        return;
+    }
+    auto xAxis = glm::cross(center, glm::vec3(1,0,0));
+    auto yAxis = glm::cross(center, glm::vec3(0,1,0));
+    auto magnitude = rand_f(0.5, 1);
+    shiftVector = glm::normalize(rand_f(-1,1) * xAxis + rand_f(-1,1) * yAxis) * magnitude;
 }

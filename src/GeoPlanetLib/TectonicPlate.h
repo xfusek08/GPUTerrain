@@ -35,12 +35,15 @@ namespace gp
 
         // properties
         float elevation;
+        glm::vec3 shiftVector;
 
         // Methods
         TectonicPlate(std::shared_ptr<Surface> surface);
 
-        inline const RegionList& getMemberRegions() const { return memberRegions; }
-        inline const RegionList& getEdgeRegions() const { return edgeRegions; }
+        inline const RegionList& getMemberRegions()    const { return memberRegions; }
+        inline const RegionList& getEdgeRegions()      const { return edgeRegions; }
+        inline bool              isExpansionFinished() const { return expansionFinished; }
+
 
         /**
          * @brief Assigns given region to this plate if it's not member of another plate
@@ -51,13 +54,18 @@ namespace gp
          */
         bool addRegion(std::shared_ptr<Region> region);
 
+
         bool expand();
+        void finishExpansion();
+        glm::vec3 getCenter();
+        void computeRamdomShift();
 
     private:
         // Properties
         RegionList memberRegions;
         RegionList edgeRegions;
         std::shared_ptr<Surface> surface;
+        glm::vec3 center;
         bool expansionFinished = false;
     };
 }
