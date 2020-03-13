@@ -19,7 +19,7 @@ namespace gp
         static TectonicPlate *getPlateOfRegion(std::shared_ptr<Region> region);
 
         /**
-         * @brief Assigns a tectonic plate to region as RegionAttribute.
+         * Assigns a tectonic plate to region as RegionAttribute.
          *
          * @param plate         pointer to tectonic plate to be assigned to region
          * @param region        region which will be given a tectonic plate
@@ -46,7 +46,7 @@ namespace gp
 
 
         /**
-         * @brief Assigns given region to this plate if it's not member of another plate
+         * Assigns given region to this plate if it's not member of another plate
          *
          * @param region
          * @return true if region was successfully assigned

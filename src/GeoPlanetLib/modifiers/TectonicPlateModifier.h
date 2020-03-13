@@ -29,8 +29,12 @@ namespace gp
             bool stepExpandPlates(std::shared_ptr<Surface> surface);
 
         private:
+            // properties
+            std::map<TectonicPlate*, float> expansionRateMap;
+
             // methods
             void runPlateFloddFill(std::shared_ptr<Surface> surface);
+            bool stepExpandPlate(std::shared_ptr<TectonicPlate> plate);
         };
 
         REGISTER_AF_TYPE(TectonicPlateModifier, SurfaceModifier);

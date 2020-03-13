@@ -41,7 +41,7 @@ namespace gp
         LocalPosition gridCoordsToLocalPos(FaceID faceId, glm::ivec2 gridCoords) const;
 
         /**
-         * @brief Calculates region id and region inner offset from local face position.
+         * Calculates region id and region inner offset from local face position.
          *
          * @param lPos Local position to be transformed.
          * @param offsetReference vector where region inner offset calculated from face coords will be stored if it's not null
@@ -55,17 +55,32 @@ namespace gp
         }
 
         /**
-         * @brief perform and wrap operation on LocalPosition if necessary
+         * Calculates region id and region inner offset from global position
+         *
+         * @param gPos global 3d position
+         * @param offsetReference vector where region inner offset calculated from face coords will be stored if it's not null
+         * @return RegionID Resultign region id
+         */
+        inline RegionID globalPosToRegion(glm::vec3 gPos, glm::vec2 *offsetReference = nullptr) const
+        {
+            if (gPos == glm::vec3(0)) {
+                return INVALID_REGION_ID;
+            }
+            return localPosToRegion(globalToLocalPos(gPos), offsetReference, true);
+        }
+
+        /**
+         * perform and wrap operation on LocalPosition if necessary
          *
          * @param lPos position to be wrapped
          * @return LocalPosition warped position or with invalid face id on not allowed double wrap.
          */
         LocalPosition wrapLocalPosition(LocalPosition lPos) const;
 
-        /** @brief Returns x, y grid coordinates for region id. */
+        /** Returns x, y grid coordinates for region id. */
 		glm::ivec2 regionIdToGridCoords(RegionID regionId) const;
 
-        /** @brief Returns local face position of topleft corner of region */
+        /** Returns local face position of topleft corner of region */
 		LocalPosition regionIdToLocalPos(RegionID regionId) const;
 
     private:

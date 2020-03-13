@@ -38,6 +38,9 @@ vec3 CoordinateSystem::localToGlobalPos(LocalPosition lPos, bool doWarp) const
 
 LocalPosition CoordinateSystem::globalToLocalPos(vec3 gPos) const
 {
+    if (gPos == vec3(0)) {
+        return {};
+    }
     FaceID faceId = faceFromGlobalPos(gPos);
     mat3 pt = facePermutationMatrix(faceId);
     vec2 lCoords = makeLocal2D(gPos * pt);

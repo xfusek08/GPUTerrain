@@ -1,12 +1,11 @@
 
 #include <random>
-
+#include <GeoPlanetLib/Utils.h>
 #include <GeoPlanetLib/modifiers/TectonicPlateModifier.h>
 
 using namespace gp;
 using namespace gp::modifiers;
 using namespace std;
-
 
 /**
  * Used
@@ -29,6 +28,7 @@ bool TectonicPlateModifier::apply(std::shared_ptr<Surface> surface)
         auto randomIndex = distr(eng) % regions.size();
         tectonicPlate->addRegion(regions[randomIndex]);
         surface->plates.push_back(tectonicPlate);
+        expansionRateMap[tectonicPlate.get()] = rand_f(0.5, 2);
     }
 
     if (!stepMode) {
@@ -49,11 +49,45 @@ bool TectonicPlateModifier::stepExpandPlates(std::shared_ptr<Surface> surface)
 {
     if (!expansionFinished) {
         expansionFinished = true;
+
+        // // more random driven expansion
+        // if (stepExpandPlate(surface->plates[rand() % surface->plates.size()])) {
+        //     expansionFinished = false;
+        // } else {
+        //     for (auto plate : surface->plates) {
+        //         if (stepExpandPlate(plate)) {
+        //             expansionFinished = false;
+        //             break;
+        //         }
+        //     }
+        // }
+
+        // evenly distributed expansion
         for (auto plate : surface->plates) {
-            if (plate->expand()) {
+            if (stepExpandPlate(plate)) {
                 expansionFinished = false;
             }
         }
     }
 	return expansionFinished;
+}
+
+bool TectonicPlateModifier::stepExpandPlate(std::shared_ptr<TectonicPlate> plate)
+{
+    // expand once for each whole value of expansion rate in this step
+    auto rate = expansionRateMap[plate.get()];
+    while (rate > 0) {
+        if (!plate->expand()) {
+            return false;
+        }
+        rate -= 1.0;
+    }
+
+    // last expansion is done probabilistically by rate
+    if (rand_f() > rate) {
+        if (!plate->expand()) {
+            return false;
+        }
+    }
+    return true;
 }

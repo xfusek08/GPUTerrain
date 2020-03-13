@@ -23,9 +23,10 @@ namespace gp
         // methods
         Surface(unsigned int resolution = Surface::DEFAULT_RESOLUTION);
 
-        inline unsigned int getResolution() const { return coordinateSystem.getResolution(); }
-        inline CoordinateSystem getCoordinateSystem() const { return coordinateSystem; }
-		inline std::shared_ptr<Region> getRegion(RegionID id) const { return regions[id]; }
+        inline unsigned int getResolution()                     const { return coordinateSystem.getResolution(); }
+        inline CoordinateSystem getCoordinateSystem()           const { return coordinateSystem; }
+		inline std::shared_ptr<Region> getRegion(RegionID id)   const { return regions[id]; }
+        inline std::shared_ptr<Region> getRegion(glm::vec3 pos) const { return regions[coordinateSystem.globalPosToRegion(pos)]; }
 
         const RegionList& getRegions() const { return regions; }
 

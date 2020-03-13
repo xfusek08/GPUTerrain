@@ -31,7 +31,7 @@ namespace gp
     };
 
     /**
-     * @brief A class providing correct geometrical transformations on surface of the cubesphere
+     * A class providing correct geometrical transformations on surface of the cubesphere
      */
     class GEOPLANETLIB_EXPORT SurfacePosition
     {
