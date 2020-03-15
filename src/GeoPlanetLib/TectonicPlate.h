@@ -34,7 +34,7 @@ namespace gp
         static void removePlatesFromSurface(std::shared_ptr<Surface> surface);
 
         // properties
-        float elevation;
+        float elevation = NAN;
         glm::vec3 shiftVector;
 
         // Methods

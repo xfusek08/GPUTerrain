@@ -3,6 +3,7 @@
 #include <unordered_map>
 
 #include <GeoPlanetLib/modifiers/ElevationModifier.h>
+#include <GeoPlanetLib/Utils.h>
 
 using namespace gp;
 using namespace gp::modifiers;
@@ -10,12 +11,21 @@ using namespace std;
 
 bool ElevationModifier::apply(shared_ptr<Surface> surface)
 {
+    usePerlin = getBoolVariable("usePerlin");
+    useFilter = getBoolVariable("useFilter");
+    usePlateCollisions = getBoolVariable("usePlateCollisions");
+    perlinFrequency = getFloatVariable("perlinFrequency");
+    perlinOctaves = getIntegerVariable("perlinOctaves");
+    perlinStrength = getFloatVariable("perlinStrength");
+    elevationRandomRange = getFloatVariable("elevationRandomRange");
+    perlinGenerator = siv::PerlinNoise(rand());
+
     if (!calculatePlateColisions(surface)) {
         for (auto region : surface->getRegions()) {
-            auto plate = TectonicPlate::getPlateOfRegion(region);
-            if (plate != nullptr) {
+            float elevation = elevationOf(region);
+            if (elevation != NAN) {
                 RegionAttributeData data;
-                data.scalar = plate->elevation;
+                data.scalar = elevation;
                 region->setAttribute(RegionAttributeType::Elevation, data);
             }
         }
@@ -25,11 +35,16 @@ bool ElevationModifier::apply(shared_ptr<Surface> surface)
 
 bool ElevationModifier::calculatePlateColisions(shared_ptr<Surface> surface) const
 {
+    if (!usePlateCollisions) {
+        return false;
+    }
+
     float step =  1 / float(surface->getResolution());
     for (auto plate: surface->plates) {
         for (auto region: plate->getEdgeRegions()) {
 
-            float totalElevation = plate->elevation;
+            // float totalElevation = plate->elevation;
+            float totalElevation = elevationOf(region);
 
             for (auto neighborID: region->getNeighborhood().each()) {
                 if (neighborID == INVALID_REGION_ID) {
@@ -66,21 +81,21 @@ bool ElevationModifier::calculatePlateColisions(shared_ptr<Surface> surface) con
 
         RegionAttributeData data;
 
-        for (auto neighborID: region->getNeighborhood().each()) {
-            if (neighborID == INVALID_REGION_ID) {
-                continue;
-            }
-            auto neighbor = surface->getRegion(neighborID);
+        if (useFilter) {
+            for (auto neighborID: region->getNeighborhood().each()) {
+                if (neighborID == INVALID_REGION_ID) {
+                    continue;
+                }
+                auto neighbor = surface->getRegion(neighborID);
 
-            auto increment = elevationOf(neighbor);
-            if (increment == NAN) {
-                return false;
-            }
+                auto increment = elevationOf(neighbor);
+                if (increment == NAN) {
+                    return false;
+                }
 
-            elevation += increment;
-            elevation *= 0.5;
-            // data.scalar = elevation * 0.1;
-            // neighbor->setAttribute(RegionAttributeType::Elevation, data);
+                elevation += increment;
+                elevation *= 0.5;
+            }
         }
 
         data.scalar = elevation;
@@ -115,6 +130,15 @@ float ElevationModifier::elevationOf(shared_ptr<Region> region) const
     auto plate = TectonicPlate::getPlateOfRegion(region);
     if (plate == nullptr) {
         return NAN;
+    }
+
+    if (isnan(plate->elevation)) {
+        plate->elevation = rand_f(-elevationRandomRange, elevationRandomRange);
+    }
+
+    if (usePerlin) {
+        auto pos = region->position.getGlobal() * perlinFrequency;
+        return plate->elevation + perlinGenerator.normalizedOctaveNoise3D(pos.x, pos.y, pos.z, perlinOctaves) * perlinStrength;
     }
 
     return plate->elevation;

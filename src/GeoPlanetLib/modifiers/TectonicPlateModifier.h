@@ -23,10 +23,17 @@ namespace gp
             bool expansionFinished = false;
 
             // methods
-            TectonicPlateModifier() {}
+            TectonicPlateModifier() : SurfaceModifier() { initVariables(); }
 
             virtual bool apply(std::shared_ptr<Surface> surface) override;
             bool stepExpandPlates(std::shared_ptr<Surface> surface);
+
+        protected:
+            // methods
+            void initVariables() override
+            {
+                addFloatVariable("expansionRateRange", "Range around 0 of random expansion speeds");
+            }
 
         private:
             // properties

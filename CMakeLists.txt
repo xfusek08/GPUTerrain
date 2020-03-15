@@ -50,12 +50,18 @@ set(SOURCES_MODIFIERS
     src/${PROJECT_NAME}/modifiers/ElevationModifier.h     src/${PROJECT_NAME}/modifiers/ElevationModifier.cpp
 )
 
+set(SOURCES_VENDOR
+    src/vendor/PerlinNoise/PerlinNoise.hpp
+)
+
 source_group("${PROJECT_NAME}"            FILES ${SOURCES})
 source_group("${PROJECT_NAME}\\modifiers" FILES ${SOURCES_MODIFIERS})
+source_group("vendor"                     FILES ${SOURCES_VENDOR})
 
 add_library(${PROJECT_NAME} SHARED                                  # Creating a shared (*.dll) library named by project name
     ${SOURCES}                                                      # and created form "SOURCES" and "INCLUDES" source files.
     ${SOURCES_MODIFIERS}
+    ${SOURCES_VENDOR}
 )
 
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})

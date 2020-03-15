@@ -23,12 +23,14 @@ bool TectonicPlateModifier::apply(std::shared_ptr<Surface> surface)
     std::mt19937_64 eng(rd()); // 64-bit Mersenne Twister 19937 generator
     std::uniform_int_distribution<unsigned long> distr;
 
+    float expRange = abs(getFloatVariable("expansionRateRange"));
+
     for (unsigned int i = 0; i < numberOfPlates; ++i) {
         auto tectonicPlate = make_shared<TectonicPlate>(surface);
         auto randomIndex = distr(eng) % regions.size();
         tectonicPlate->addRegion(regions[randomIndex]);
         surface->plates.push_back(tectonicPlate);
-        expansionRateMap[tectonicPlate.get()] = rand_f(0.5, 2);
+        expansionRateMap[tectonicPlate.get()] = rand_f(-expRange, expRange);
     }
 
     if (!stepMode) {

@@ -51,7 +51,6 @@ void TectonicPlate::removePlatesFromSurface(std::shared_ptr<Surface> surface)
 // ============================================================================
 
 TectonicPlate::TectonicPlate(std::shared_ptr<Surface> surface) :
-    elevation(rand_f(-0.3, 0.3)),
     center(glm::vec3(0)),
     shiftVector(glm::vec3(0)),
     surface(surface)
