@@ -45,13 +45,18 @@ namespace gp
         inline float getFloatVariable(std::string ident) const { return getVariable(ident).value.floatVal; }
         ModifierVariable getVariable(std::string ident)  const;
 
+        inline void setIntegerVariable(std::string ident, int val) { ModifierVariableData data; data.intVal = val; return setVariable(ident, data); }
+        inline void setBoolVariable(std::string ident, bool val)   { ModifierVariableData data; data.boolval = val; return setVariable(ident, data); }
+        inline void setFloatVariable(std::string ident, float val) { ModifierVariableData data; data.floatVal = val; return setVariable(ident, data); }
+        void setVariable(std::string ident, ModifierVariableData data);
+
+    protected:
+        // methods
         void addIntegerVariable(std::string ident, std::string description, int value = 0);
         void addBoolVariable(std::string ident, std::string description, bool value = false);
         void addFloatVariable(std::string ident, std::string description, float value = 0.0);
         void addVariable(std::string ident, ModifierVariable variable);
 
-    protected:
-        // methods
         virtual void initVariables() {};
     };
 }

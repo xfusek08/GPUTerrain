@@ -16,14 +16,15 @@ bool TectonicPlateModifier::apply(std::shared_ptr<Surface> surface)
 {
     surface->plates.clear();
     TectonicPlate::removePlatesFromSurface(surface);
+    expansionFinished  = false;
 
-    auto regions = surface->getRegions();
+    int numberOfPlates = getIntegerVariable("plateNumber");
+    float expRange     = abs(getFloatVariable("expansionRateRange"));
+    auto regions       = surface->getRegions();
 
     std::random_device rd;
     std::mt19937_64 eng(rd()); // 64-bit Mersenne Twister 19937 generator
     std::uniform_int_distribution<unsigned long> distr;
-
-    float expRange = abs(getFloatVariable("expansionRateRange"));
 
     for (unsigned int i = 0; i < numberOfPlates; ++i) {
         auto tectonicPlate = make_shared<TectonicPlate>(surface);
@@ -33,45 +34,57 @@ bool TectonicPlateModifier::apply(std::shared_ptr<Surface> surface)
         expansionRateMap[tectonicPlate.get()] = rand_f(-expRange, expRange);
     }
 
-    if (!stepMode) {
+    if (!getBoolVariable("stepMode")) {
         runPlateFloddFill(surface);
     }
 
     return true;
 }
 
+bool TectonicPlateModifier::stepExpansion(std::shared_ptr<Surface> surface)
+{
+    if (isExpansionFinished() || !getBoolVariable("stepMode")) {
+        return true;
+    }
+    stepExpansionInternal(surface, getBoolVariable("randomDriven"));
+    return isExpansionFinished();
+}
+
+/*************** PRIVATE ***************/
+
 void TectonicPlateModifier::runPlateFloddFill(std::shared_ptr<Surface> surface)
 {
+    bool randomDriven = getBoolVariable("randomDriven");
     while (!expansionFinished) {
-        expansionFinished = stepExpandPlates(surface);
+        stepExpansionInternal(surface, randomDriven);
     }
 }
 
-bool TectonicPlateModifier::stepExpandPlates(std::shared_ptr<Surface> surface)
+void TectonicPlateModifier::stepExpansionInternal(std::shared_ptr<Surface> surface, bool randomDriven)
 {
     if (!expansionFinished) {
         expansionFinished = true;
 
-        // // more random driven expansion
-        // if (stepExpandPlate(surface->plates[rand() % surface->plates.size()])) {
-        //     expansionFinished = false;
-        // } else {
-        //     for (auto plate : surface->plates) {
-        //         if (stepExpandPlate(plate)) {
-        //             expansionFinished = false;
-        //             break;
-        //         }
-        //     }
-        // }
-
-        // evenly distributed expansion
-        for (auto plate : surface->plates) {
-            if (stepExpandPlate(plate)) {
+        // more random driven expansion
+        if (randomDriven) {
+            if (stepExpandPlate(surface->plates[rand() % surface->plates.size()])) {
                 expansionFinished = false;
+            } else {
+                for (auto plate : surface->plates) {
+                    if (stepExpandPlate(plate)) {
+                        expansionFinished = false;
+                        break;
+                    }
+                }
+            }
+        } else { // evenly distributed expansion
+            for (auto plate : surface->plates) {
+                if (stepExpandPlate(plate)) {
+                    expansionFinished = false;
+                }
             }
         }
     }
-	return expansionFinished;
 }
 
 bool TectonicPlateModifier::stepExpandPlate(std::shared_ptr<TectonicPlate> plate)

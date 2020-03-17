@@ -14,6 +14,7 @@ bool ElevationModifier::apply(shared_ptr<Surface> surface)
     usePerlin = getBoolVariable("usePerlin");
     useFilter = getBoolVariable("useFilter");
     usePlateCollisions = getBoolVariable("usePlateCollisions");
+    collisionStrength = getFloatVariable("collisionStrength");
     perlinFrequency = getFloatVariable("perlinFrequency");
     perlinOctaves = getIntegerVariable("perlinOctaves");
     perlinStrength = getFloatVariable("perlinStrength");
@@ -22,8 +23,9 @@ bool ElevationModifier::apply(shared_ptr<Surface> surface)
 
     if (!calculatePlateColisions(surface)) {
         for (auto region : surface->getRegions()) {
+            region->unsetAttribute(RegionAttributeType::Elevation);
             float elevation = elevationOf(region);
-            if (elevation != NAN) {
+            if (!isnan(elevation)) {
                 RegionAttributeData data;
                 data.scalar = elevation;
                 region->setAttribute(RegionAttributeType::Elevation, data);
@@ -62,7 +64,7 @@ bool ElevationModifier::calculatePlateColisions(shared_ptr<Surface> surface) con
                 if (neighborPlate != plate.get()) {
                     float elevationCoefficient = computeElevationCoefficient(plate.get(), neighborPlate, region.get(), neighbor.get());
 
-                    totalElevation += elevationCoefficient; // for now just sum of all neighbor later maybe average or average weight by magnitude of shift
+                    totalElevation += elevationCoefficient * collisionStrength; // for now just sum of all neighbor later maybe average or average weight by magnitude of shift
                 }
             }
 

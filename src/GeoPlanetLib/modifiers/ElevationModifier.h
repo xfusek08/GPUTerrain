@@ -25,11 +25,12 @@ namespace gp
             // methods
             void initVariables() override
             {
-                addFloatVariable("elevationRandomRange", "Range around 0 of random plate elevation", 0.5);
+                addFloatVariable("elevationRandomRange", "Range around 0 of random plate elevation", 0.8);
                 addBoolVariable("usePlateCollisions", "Use plate collisions", true);
                 addBoolVariable("useFilter", "Use smooth filter on terrain", true);
                 addBoolVariable("usePerlin", "Use 3d perlin noise", true);
-                addFloatVariable("perlinFrequency", "Frequency of perlin noise", 11);
+                addFloatVariable("perlinFrequency", "Frequency of perlin noise", 15);
+                addFloatVariable("collisionStrength", "Collision strength multiplier", 1);
                 addIntegerVariable("perlinOctaves", "Octaves for perlin noise", 1);
                 addFloatVariable("perlinStrength", "Multiplier for perlin noise", 0.5);
             }
@@ -37,9 +38,11 @@ namespace gp
         private:
             // properties
             float elevationRandomRange = 0;
+            float collisionStrength = 0;
             bool useFilter = false;
             bool usePerlin = false;
             bool usePlateCollisions = false;
+
             float perlinFrequency = 0;
             int perlinOctaves = 0;
             float perlinStrength = 0;

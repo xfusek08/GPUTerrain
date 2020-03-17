@@ -19,6 +19,14 @@ ModifierVariable SurfaceModifier::getVariable(std::string ident) const
     return it->second;
 }
 
+void SurfaceModifier::setVariable(std::string ident, ModifierVariableData data)
+{
+    auto it = variables.find(ident);
+    if (it != variables.end()) {
+        variables[ident].value = data;
+    }
+}
+
 void SurfaceModifier::addIntegerVariable(std::string name, std::string description, int value)
 {
     ModifierVariable var;

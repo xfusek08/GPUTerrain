@@ -14,33 +14,33 @@ namespace gp
         class GEOPLANETLIB_EXPORT TectonicPlateModifier : public SurfaceModifier
         {
         public:
-            // constants
-            const unsigned int DEFAULT_NUMBER_OF_PLATES = 50;
-
-            // properties
-            unsigned int numberOfPlates = TectonicPlateModifier::DEFAULT_NUMBER_OF_PLATES;
-            bool stepMode = false;
-            bool expansionFinished = false;
 
             // methods
             TectonicPlateModifier() : SurfaceModifier() { initVariables(); }
 
+            inline bool isExpansionFinished() const { return expansionFinished; }
+
             virtual bool apply(std::shared_ptr<Surface> surface) override;
-            bool stepExpandPlates(std::shared_ptr<Surface> surface);
+            bool stepExpansion(std::shared_ptr<Surface> surface);
 
         protected:
             // methods
             void initVariables() override
             {
-                addFloatVariable("expansionRateRange", "Range around 0 of random expansion speeds");
+                addIntegerVariable("plateNumber", "Number of plates", 50);
+                addFloatVariable("expansionRateRange", "Random expansion speed range around 0", 1);
+                addBoolVariable("randomDriven", "Allow random driven expansion", false);
+                addBoolVariable("stepMode", "Allow step mode", false);
             }
 
         private:
             // properties
+            bool expansionFinished = false;
             std::map<TectonicPlate*, float> expansionRateMap;
 
             // methods
             void runPlateFloddFill(std::shared_ptr<Surface> surface);
+            void stepExpansionInternal(std::shared_ptr<Surface> surface, bool randomDriven);
             bool stepExpandPlate(std::shared_ptr<TectonicPlate> plate);
         };
 
