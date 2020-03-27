@@ -110,12 +110,11 @@ LocalPosition CoordinateSystem::wrapLocalPosition(LocalPosition lPos) const
 
     if (min(faceCoords_extra.x, faceCoords_extra.y) > 0) {
         return {}; // double wrap - not allowed
-    } else {
-        // wrap to neighbor cube face in 3D space
-        local3dCoords = vec3(faceCoords_clamp.x, faceCoords_clamp.y, 1 - extra_dist);
-		auto pt = facePermutationMatrix(lPos.faceId);
-        return globalToLocalPos(pt * local3dCoords);
     }
+    // wrap to neighbor cube face in 3D space
+    local3dCoords = vec3(faceCoords_clamp.x, faceCoords_clamp.y, 1 - extra_dist);
+    auto pt = facePermutationMatrix(lPos.faceId);
+    return globalToLocalPos(pt * local3dCoords);
 }
 
 ivec2 CoordinateSystem::regionIdToGridCoords(RegionID regionId) const
