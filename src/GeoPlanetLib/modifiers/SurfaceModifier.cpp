@@ -1,11 +1,10 @@
 
-#include <GeoPlanetLib/SurfaceModifier.h>
-
-DEFINE_AF_BASE_STORAGE(gp::SurfaceModifier);
+#include <GeoPlanetLib/modifiers/SurfaceModifier.h>
 
 using namespace gp;
+using namespace gp::modifiers;
 
-SurfaceModifier::SurfaceModifier()
+SurfaceModifier::SurfaceModifier(ModifierType type) : type(type)
 {
     initVariables();
 }

@@ -5,7 +5,7 @@
 
 #include <GeoPlanetLib/geoplanetlib_export.h>
 
-#include <GeoPlanetLib/SurfaceModifier.h>
+#include <GeoPlanetLib/modifiers/ModifierFactory.h>
 
 namespace gp
 {
@@ -14,9 +14,8 @@ namespace gp
         class GEOPLANETLIB_EXPORT TectonicPlateModifier : public SurfaceModifier
         {
         public:
-
             // methods
-            TectonicPlateModifier() : SurfaceModifier() { initVariables(); }
+            TectonicPlateModifier(ModifierType type) : SurfaceModifier(type) { initVariables(); }
 
             inline bool isExpansionFinished() const { return expansionFinished; }
 
@@ -43,7 +42,7 @@ namespace gp
             void stepExpansionInternal(std::shared_ptr<Surface> surface, bool randomDriven);
             bool stepExpandPlate(std::shared_ptr<TectonicPlate> plate);
         };
-
-        REGISTER_AF_TYPE(TectonicPlateModifier, SurfaceModifier);
     }
 }
+
+REGISTER_MODIFIER_TYPE(TectonicPlateModifier);

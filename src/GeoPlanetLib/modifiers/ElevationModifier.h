@@ -5,7 +5,7 @@
 
 #include <GeoPlanetLib/geoplanetlib_export.h>
 
-#include <GeoPlanetLib/SurfaceModifier.h>
+#include <GeoPlanetLib/modifiers/ModifierFactory.h>
 
 #include <vendor/PerlinNoise/PerlinNoise.hpp>
 
@@ -17,7 +17,7 @@ namespace gp
         {
         public:
             // methods
-            ElevationModifier() : SurfaceModifier() { initVariables(); }
+            ElevationModifier(ModifierType type) : SurfaceModifier(type) { initVariables(); }
 
             virtual bool apply(std::shared_ptr<Surface> surface) override;
 
@@ -53,7 +53,7 @@ namespace gp
             float elevationOf(std::shared_ptr<Region> region) const;
             bool  calculatePlateColisions(std::shared_ptr<Surface> surface) const;
         };
-
-        REGISTER_AF_TYPE(ElevationModifier, SurfaceModifier);
     }
 }
+
+REGISTER_MODIFIER_TYPE(ElevationModifier);

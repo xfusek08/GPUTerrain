@@ -3,9 +3,11 @@
 #include <stdexcept>
 
 #include <GeoPlanetLib/SurfaceGenerator.h>
+#include <GeoPlanetLib/modifiers/ModifierFactory.h>
 
 using namespace std;
 using namespace gp;
+using namespace gp::modifiers;
 
 SurfaceGenerator::SurfaceGenerator(const std::vector<std::string>& modifierConfig)
 {
@@ -35,11 +37,11 @@ ModifierListItem SurfaceGenerator::addModifier(string ident, std::shared_ptr<Sur
     return newItem;
 }
 
-ModifierListItem SurfaceGenerator::addModifier(string ident, string modifierClass, bool enabled)
+ModifierListItem SurfaceGenerator::addModifier(string ident, ModifierType type, bool enabled)
 {
-    shared_ptr<SurfaceModifier> modifier = SurfaceModifier::create(modifierClass);
+    shared_ptr<SurfaceModifier> modifier = ModifierFactory::create(type);
     if (modifier == nullptr) {
-        throw invalid_argument("\"" + modifierClass + "\" is not valid modifier class.");
+        throw invalid_argument("\"" + type + "\" is not valid modifier class.");
     }
     return addModifier(ident, modifier, enabled);
 }

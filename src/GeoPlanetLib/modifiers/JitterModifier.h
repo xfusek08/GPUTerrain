@@ -4,7 +4,7 @@
 
 #include <GeoPlanetLib/geoplanetlib_export.h>
 
-#include <GeoPlanetLib/SurfaceModifier.h>
+#include <GeoPlanetLib/modifiers/ModifierFactory.h>
 #include <GeoPlanetLib/Region.h>
 
 namespace gp
@@ -15,7 +15,7 @@ namespace gp
         {
         public:
             // methods
-            JitterModifier() { initVariables(); }
+            JitterModifier(ModifierType type) : SurfaceModifier(type) { initVariables(); }
 
             bool apply(std::shared_ptr<Surface> surface) override;
 
@@ -32,7 +32,7 @@ namespace gp
             void jitterRegion(std::shared_ptr<Region> region);
             void setJitter(float value);
         };
-
-        REGISTER_AF_TYPE(JitterModifier, SurfaceModifier);
     }
 }
+
+REGISTER_MODIFIER_TYPE(JitterModifier);

@@ -11,6 +11,8 @@ using namespace std;
  * Used
  * https://stackoverflow.com/questions/22883840/c-get-random-number-from-0-to-max-long-long-integer
  * post about large random number generators
+ *
+ * Todo: move random generation to other file
  */
 bool TectonicPlateModifier::apply(std::shared_ptr<Surface> surface)
 {
