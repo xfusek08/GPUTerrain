@@ -5,6 +5,11 @@
 
 #include <GeoPlanetLib/modifiers/SurfaceModifier.h>
 
+
+/**
+ * Inspired by: https://blog.noctua-software.com/object-factory-c++.html
+ */
+
 #define REGISTER_MODIFIER_TYPE(modifier_class)\
 namespace gp {\
     namespace modifiers {\

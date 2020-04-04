@@ -1,2 +1,2 @@
 
-# Library for generating of procedural planet surfacess
+# A C++ Library for generation of procedural planet surfaces

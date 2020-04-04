@@ -32,7 +32,6 @@ set(${APP_NAME}_RESOURCES  "${DEFAULT_RESOERCES_PATH}" CACHE PATH "Relative or a
 
 set(SOURCES
     src/${PROJECT_NAME}/Utils.h
-    src/${PROJECT_NAME}/AbstactFactory.h
     src/${PROJECT_NAME}/CoordinateTypes.h
     src/${PROJECT_NAME}/CoordinateSystem.h src/${PROJECT_NAME}/CoordinateSystem.cpp
     src/${PROJECT_NAME}/SurfacePosition.h  src/${PROJECT_NAME}/SurfacePosition.cpp
