@@ -86,12 +86,9 @@ bool TectonicPlate::expand()
 				auto neighbor = surface->getRegion(neighborId);
 				if (addRegion(neighbor)) {
 					regionAdded = true;
-				}
-				else {
-					if (TectonicPlate::getPlateOfRegion(neighbor) != this) {
-						isOnEdge = true;
-					}
-				}
+                } else if (TectonicPlate::getPlateOfRegion(neighbor) != this) {
+                    isOnEdge = true;
+                }
 			}
         }
 

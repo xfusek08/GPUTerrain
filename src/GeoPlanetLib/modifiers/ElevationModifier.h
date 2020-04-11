@@ -30,9 +30,9 @@ namespace gp
                 addBoolVariable("useFilter", "Use smooth filter on terrain", true);
                 addBoolVariable("usePerlin", "Use 3d perlin noise", true);
                 addFloatVariable("perlinFrequency", "Frequency of perlin noise", 15);
-                addFloatVariable("collisionStrength", "Collision strength multiplier", 1);
+                addFloatVariable("collisionStrength", "Collision strength multiplier", 0.5);
                 addIntegerVariable("perlinOctaves", "Octaves for perlin noise", 1);
-                addFloatVariable("perlinStrength", "Multiplier for perlin noise", 0.5);
+                addFloatVariable("perlinStrength", "Multiplier for perlin noise", 0.2);
             }
 
         private:

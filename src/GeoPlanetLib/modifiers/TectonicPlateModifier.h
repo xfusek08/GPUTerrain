@@ -27,7 +27,7 @@ namespace gp
             void initVariables() override
             {
                 addIntegerVariable("plateNumber", "Number of plates", 50);
-                addFloatVariable("expansionRateRange", "Random expansion speed range around 0", 1);
+                addFloatVariable("expansionRateRange", "Random expansion speed range around 0", 0.5);
                 addBoolVariable("randomDriven", "Allow random driven expansion", false);
                 addBoolVariable("stepMode", "Allow step mode", false);
             }

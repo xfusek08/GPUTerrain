@@ -33,7 +33,14 @@ bool TectonicPlateModifier::apply(std::shared_ptr<Surface> surface)
         auto randomIndex = distr(eng) % regions.size();
         tectonicPlate->addRegion(regions[randomIndex]);
         surface->plates.push_back(tectonicPlate);
-        expansionRateMap[tectonicPlate.get()] = rand_f(-expRange, expRange);
+
+        float from = 1 - expRange;
+        float to = 1 + expRange;
+
+        if (from < 0) {
+            from = 0;
+        }
+        expansionRateMap[tectonicPlate.get()] = rand_f(from, to);
     }
 
     if (!getBoolVariable("stepMode")) {
@@ -73,7 +80,7 @@ void TectonicPlateModifier::stepExpansionInternal(std::shared_ptr<Surface> surfa
                 expansionFinished = false;
             } else {
                 for (auto plate : surface->plates) {
-                    if (stepExpandPlate(plate)) {
+                    if (!plate->isExpansionFinished()) {
                         expansionFinished = false;
                         break;
                     }

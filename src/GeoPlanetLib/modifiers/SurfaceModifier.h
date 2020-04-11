@@ -34,14 +34,13 @@ namespace gp
         class GEOPLANETLIB_EXPORT SurfaceModifier
         {
         public:
-            // properties
-            std::map<std::string, ModifierVariable> variables;
 
             //methods
             SurfaceModifier(ModifierType type);
 
             virtual bool apply(std::shared_ptr<Surface> surface) = 0;
 
+            inline const std::map<std::string, ModifierVariable>& getVariables() { return variables; }
             inline ModifierType getType() const { return type; }
             inline int getIntegerVariable(std::string ident) const { return getVariable(ident).value.intVal; }
             inline bool getBoolVariable(std::string ident)   const { return getVariable(ident).value.boolval; }
@@ -50,12 +49,13 @@ namespace gp
 
             inline void setIntegerVariable(std::string ident, int val) { ModifierVariableData data; data.intVal = val; return setVariable(ident, data); }
             inline void setBoolVariable(std::string ident, bool val)   { ModifierVariableData data; data.boolval = val; return setVariable(ident, data); }
-            inline void setFloatVariable(std::string ident, float val) { ModifierVariableData data; data.floatVal = val; return setVariable(ident, data); }
+            inline void setFloatVariable(std::string ident, float val) { ModifierVariableData data; data.floatVal = val; return setVariable(ident, data); }                        
             void setVariable(std::string ident, ModifierVariableData data);
 
         protected:
             // properties
             ModifierType type = types::UndefinedModifier;
+            std::map<std::string, ModifierVariable> variables;
 
             // methods
             void addIntegerVariable(std::string ident, std::string description, int value = 0);
