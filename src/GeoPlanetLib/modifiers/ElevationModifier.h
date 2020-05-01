@@ -27,12 +27,12 @@ namespace gp
             {
                 addFloatVariable("elevationRandomRange", "Range around 0 of random plate elevation", 0.8);
                 addBoolVariable("usePlateCollisions", "Use plate collisions", true);
-                addBoolVariable("useFilter", "Use smooth filter on terrain", true);
+                addFloatVariable("collisionStrength", "Collision strength multiplier", 0.5);
                 addBoolVariable("usePerlin", "Use 3d perlin noise", true);
                 addFloatVariable("perlinFrequency", "Frequency of perlin noise", 15);
-                addFloatVariable("collisionStrength", "Collision strength multiplier", 0.5);
                 addIntegerVariable("perlinOctaves", "Octaves for perlin noise", 1);
                 addFloatVariable("perlinStrength", "Multiplier for perlin noise", 0.2);
+                addBoolVariable("useFilter", "Use smooth filter on terrain", true);
             }
 
         private:
@@ -49,7 +49,7 @@ namespace gp
             siv::PerlinNoise perlinGenerator;
 
             // methods
-            float computeElevationCoefficient(TectonicPlate* plate1, TectonicPlate* plate2, Region* region1, Region* region2) const;
+            float computePressure(TectonicPlate* plate1, TectonicPlate* plate2, Region* region1, Region* region2) const;
             float elevationOf(std::shared_ptr<Region> region) const;
             bool  calculatePlateColisions(std::shared_ptr<Surface> surface) const;
         };

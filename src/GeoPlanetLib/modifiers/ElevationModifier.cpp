@@ -62,9 +62,9 @@ bool ElevationModifier::calculatePlateColisions(shared_ptr<Surface> surface) con
                 }
 
                 if (neighborPlate != plate.get()) {
-                    float elevationCoefficient = computeElevationCoefficient(plate.get(), neighborPlate, region.get(), neighbor.get());
+                    float pressure = computePressure(plate.get(), neighborPlate, region.get(), neighbor.get());
 
-                    totalElevation += elevationCoefficient * collisionStrength; // for now just sum of all neighbor later maybe average or average weight by magnitude of shift
+                    totalElevation += pressure * collisionStrength; // for now just sum of all neighbor later maybe average or average weight by magnitude of shift
                 }
             }
 
@@ -107,7 +107,7 @@ bool ElevationModifier::calculatePlateColisions(shared_ptr<Surface> surface) con
     return true;
 }
 
-float ElevationModifier::computeElevationCoefficient(TectonicPlate* plate1, TectonicPlate* plate2, Region* region1, Region* region2) const
+float ElevationModifier::computePressure(TectonicPlate* plate1, TectonicPlate* plate2, Region* region1, Region* region2) const
 {
     auto v1 = region1->position.getGlobal();
     auto v2 = region2->position.getGlobal();
