@@ -25,14 +25,14 @@ namespace gp
             // methods
             void initVariables() override
             {
-                addFloatVariable("elevationRandomRange", "Range around 0 of random plate elevation", 0.8);
-                addBoolVariable("usePlateCollisions", "Use plate collisions", true);
-                addFloatVariable("collisionStrength", "Collision strength multiplier", 0.5);
-                addBoolVariable("usePerlin", "Use 3d perlin noise", true);
-                addFloatVariable("perlinFrequency", "Frequency of perlin noise", 15);
-                addIntegerVariable("perlinOctaves", "Octaves for perlin noise", 1);
-                addFloatVariable("perlinStrength", "Multiplier for perlin noise", 0.2);
-                addBoolVariable("useFilter", "Use smooth filter on terrain", true);
+                defineVariable(ModifierVariable("elevationRandomRange", "Range around 0 of random plate elevation", 0.8f, 0.f, 1.f));
+                defineVariable(ModifierVariable("collisionStrength", "Collision strength multiplier", 0.5f, 0.f, 10.f));
+                defineVariable(ModifierVariable("perlinFrequency", "Frequency of perlin noise", 15.f, 0.1f, 100.f));
+                defineVariable(ModifierVariable("perlinOctaves", "Octaves for perlin noise", 1, 1, 10));
+                defineVariable(ModifierVariable("perlinStrength", "Multiplier for perlin noise", 0.2f, 0.f, 10.f));
+                defineVariable(ModifierVariable("usePlateCollisions", "Use plate collisions", true));
+                defineVariable(ModifierVariable("usePerlin", "Use 3d perlin noise", true));
+                defineVariable(ModifierVariable("useFilter", "Use smooth filter on terrain", true));
             }
 
         private:

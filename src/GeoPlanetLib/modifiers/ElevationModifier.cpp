@@ -11,14 +11,14 @@ using namespace std;
 
 bool ElevationModifier::apply(shared_ptr<Surface> surface)
 {
-    usePerlin = getBoolVariable("usePerlin");
-    useFilter = getBoolVariable("useFilter");
-    usePlateCollisions = getBoolVariable("usePlateCollisions");
-    collisionStrength = getFloatVariable("collisionStrength");
-    perlinFrequency = getFloatVariable("perlinFrequency");
-    perlinOctaves = getIntegerVariable("perlinOctaves");
-    perlinStrength = getFloatVariable("perlinStrength");
-    elevationRandomRange = getFloatVariable("elevationRandomRange");
+    usePerlin = getBool("usePerlin");
+    useFilter = getBool("useFilter");
+    usePlateCollisions = getBool("usePlateCollisions");
+    collisionStrength = getFloat("collisionStrength");
+    perlinFrequency = getFloat("perlinFrequency");
+    perlinOctaves = getInt("perlinOctaves");
+    perlinStrength = getFloat("perlinStrength");
+    elevationRandomRange = getFloat("elevationRandomRange");
     perlinGenerator = siv::PerlinNoise(rand());
 
     if (!calculatePlateColisions(surface)) {

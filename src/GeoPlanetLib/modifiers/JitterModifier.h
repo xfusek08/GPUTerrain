@@ -26,11 +26,10 @@ namespace gp
             // methods
             void initVariables() override
             {
-                addFloatVariable("jitter", "Jitter of regions", 1.f);
+                defineVariable(ModifierVariable("jitter", "Jitter of regions", 1.f, 0.f, 1.f));
             }
 
             void jitterRegion(std::shared_ptr<Region> region);
-            void setJitter(float value);
         };
     }
 }

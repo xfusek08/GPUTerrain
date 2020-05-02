@@ -45,6 +45,7 @@ set(SOURCES_MODIFIERS
     src/${PROJECT_NAME}/modifiers/ModifierType.h
     src/${PROJECT_NAME}/modifiers/ModifierFactory.h
     src/${PROJECT_NAME}/modifiers/SurfaceModifier.h       src/${PROJECT_NAME}/modifiers/SurfaceModifier.cpp
+    src/${PROJECT_NAME}/modifiers/ModifierVariable.h      src/${PROJECT_NAME}/modifiers/ModifierVariable.cpp
 
     src/${PROJECT_NAME}/modifiers/modifiers.h
     src/${PROJECT_NAME}/modifiers/JitterModifier.h        src/${PROJECT_NAME}/modifiers/JitterModifier.cpp

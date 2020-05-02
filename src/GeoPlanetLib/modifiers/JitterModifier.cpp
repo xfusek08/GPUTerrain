@@ -9,8 +9,7 @@ using namespace glm;
 
 bool JitterModifier::apply(std::shared_ptr<Surface> surface)
 {
-    setJitter(getFloatVariable("jitter"));
-
+    jitter = getFloat("jitter");
 	for (auto region : surface->getRegions()) {
         jitterRegion(region);
     }
@@ -26,15 +25,4 @@ void JitterModifier::jitterRegion(std::shared_ptr<Region> region)
         0.5 + jitterX,
         0.5 + jitterY
     ));
-}
-
-void JitterModifier::setJitter(float value)
-{
-    if (value < 0) {
-        value = 0;
-    } else if (value > 1) {
-        value = 1;
-    }
-    jitter = value;
-    setFloatVariable("jitter", jitter);
 }

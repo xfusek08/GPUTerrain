@@ -20,8 +20,8 @@ bool TectonicPlateModifier::apply(std::shared_ptr<Surface> surface)
     TectonicPlate::removePlatesFromSurface(surface);
     expansionFinished  = false;
 
-    int numberOfPlates = getIntegerVariable("plateNumber");
-    float expRange     = abs(getFloatVariable("expansionRateRange"));
+    int numberOfPlates = getInt("plateNumber");
+    float expRange     = abs(getFloat("expansionRateRange"));
     auto regions       = surface->getRegions();
 
     std::random_device rd;
@@ -43,7 +43,7 @@ bool TectonicPlateModifier::apply(std::shared_ptr<Surface> surface)
         expansionRateMap[tectonicPlate.get()] = rand_f(from, to);
     }
 
-    if (!getBoolVariable("stepMode")) {
+    if (!getBool("stepMode")) {
         runPlateFloddFill(surface);
     }
 
@@ -52,10 +52,10 @@ bool TectonicPlateModifier::apply(std::shared_ptr<Surface> surface)
 
 bool TectonicPlateModifier::stepExpansion(std::shared_ptr<Surface> surface)
 {
-    if (isExpansionFinished() || !getBoolVariable("stepMode")) {
+    if (isExpansionFinished() || !getBool("stepMode")) {
         return true;
     }
-    stepExpansionInternal(surface, getBoolVariable("randomDriven"));
+    stepExpansionInternal(surface, getBool("randomDriven"));
     return isExpansionFinished();
 }
 
@@ -63,7 +63,7 @@ bool TectonicPlateModifier::stepExpansion(std::shared_ptr<Surface> surface)
 
 void TectonicPlateModifier::runPlateFloddFill(std::shared_ptr<Surface> surface)
 {
-    bool randomDriven = getBoolVariable("randomDriven");
+    bool randomDriven = getBool("randomDriven");
     while (!expansionFinished) {
         stepExpansionInternal(surface, randomDriven);
     }

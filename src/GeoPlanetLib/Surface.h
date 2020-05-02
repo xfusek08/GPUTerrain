@@ -16,6 +16,7 @@ namespace gp
     public:
         // constants
         static const unsigned int DEFAULT_RESOLUTION = 50;
+        static const unsigned int MAX_RESOLUTION = 100;
 
         // Properties
         PlateList plates;

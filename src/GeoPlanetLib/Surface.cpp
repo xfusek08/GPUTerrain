@@ -3,8 +3,12 @@
 
 using namespace gp;
 
-Surface::Surface(unsigned int resolution) : coordinateSystem(CoordinateSystem(resolution))
-{    
+Surface::Surface(unsigned int resolution) : coordinateSystem(
+	CoordinateSystem(resolution > Surface::MAX_RESOLUTION 
+		? Surface::MAX_RESOLUTION 
+		: resolution
+	)
+) {
 	regionInit();
 }
 
