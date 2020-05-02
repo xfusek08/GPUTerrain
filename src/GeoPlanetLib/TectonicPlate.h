@@ -29,9 +29,11 @@ namespace gp
          */
         static bool assignPlateToRegion(TectonicPlate *plate, std::shared_ptr<Region> region, bool forceOverride = false);
 
-        static void removePlateFromRegion(std::shared_ptr<Region> region);
+        static void removePlateFromRegion(Region *region);
+        inline static void removePlateFromRegion(std::shared_ptr<Region> region) { TectonicPlate::removePlateFromRegion(region.get()); }
 
-        static void removePlatesFromSurface(std::shared_ptr<Surface> surface);
+        static void removePlatesFromSurface(Surface *surface);
+        inline static void removePlatesFromSurface(std::shared_ptr<Surface> surface) { TectonicPlate::removePlatesFromSurface(surface.get()); } 
 
         // properties
         float elevation = NAN;
@@ -53,7 +55,6 @@ namespace gp
          * @return false if region was refused due to having a region already
          */
         bool addRegion(std::shared_ptr<Region> region);
-
 
         bool expand();
         void finishExpansion();

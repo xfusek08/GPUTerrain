@@ -34,15 +34,19 @@ bool TectonicPlate::assignPlateToRegion(TectonicPlate *plate, std::shared_ptr<Re
     return false;
 }
 
-void TectonicPlate::removePlateFromRegion(std::shared_ptr<Region> region)
+void TectonicPlate::removePlateFromRegion(Region *region)
 {
-    region->unsetAttribute(RegionAttributeType::TectonicPlate);
+    if (region != nullptr) {
+        region->unsetAttribute(RegionAttributeType::TectonicPlate);
+    }
 }
 
-void TectonicPlate::removePlatesFromSurface(std::shared_ptr<Surface> surface)
+void TectonicPlate::removePlatesFromSurface(Surface *surface)
 {
-    for (auto region : surface->getRegions()) {
-        TectonicPlate::removePlateFromRegion(region);
+    if (surface != nullptr) {
+        for (auto region : surface->getRegions()) {
+            TectonicPlate::removePlateFromRegion(region);
+        }
     }
 }
 

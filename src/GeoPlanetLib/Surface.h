@@ -22,6 +22,10 @@ namespace gp
 
         // methods
         Surface(unsigned int resolution = Surface::DEFAULT_RESOLUTION);
+        ~Surface();
+
+        void clear();
+        void reset();
 
         inline unsigned int getResolution()                     const { return coordinateSystem.getResolution(); }
         inline CoordinateSystem getCoordinateSystem()           const { return coordinateSystem; }
@@ -34,5 +38,8 @@ namespace gp
         // properties
         CoordinateSystem coordinateSystem;
 		RegionList regions;
+
+        // methods
+        void regionInit();
     };
 }
