@@ -6,15 +6,24 @@
 
 namespace gp
 {
+    /** Local position on cube */
     struct LocalPosition {
-        FaceID    faceId = FaceID::FACE_INVALID;
-        glm::vec2 coords = glm::vec2(0,0);
+        FaceID    faceId = FaceID::FACE_INVALID; /// id of face
+        glm::vec2 coords = glm::vec2(0,0); /// coordinates in the face
     };
 
+    /**
+     * Coordinate system of a surface
+     *
+     * This class encapsulation all necessary computation for transforming local region position to global position
+     */
     class CoordinateSystem
     {
     public:
+
         // methods
+
+        /** Construct a new Coordinate System object for given surface resolution */
         CoordinateSystem(unsigned int resolution);
 
         /** Returns resolution of the system. */
@@ -29,15 +38,37 @@ namespace gp
         /** Unvarp warped local position to flat cube surface */
         glm::vec2 unwarp(glm::vec2 wlCoords) const;
 
-        /** Return a faceid of region id */
+        /** Computes face id from region id */
 		FaceID faceIdFromRegionId(RegionID RegionID) const;
 
-        /** Converts local face position to global space position on unit sphere. */
+        /**
+         * Converts local face position to global space position on unit sphere.
+         *
+         * @param lPos   Local position which will be converted
+         * @param doWarp Flag enabling wrap function to compensate normalization
+         *
+         * @return glm::vec3 final global position in 3d space.
+         */
         glm::vec3 localToGlobalPos(LocalPosition lPos, bool doWarp = true) const;
 
-        /** Converts global space position on unit sphere to local face position. */
+        /**
+         * Projects 3d global space position to local position on uint cube.
+         *
+         * @param gPos Position in 3d
+         * @return LocalPosition Coresponding local postition on unit cube after projection
+         */
         LocalPosition globalToLocalPos(glm::vec3 gPos) const;
 
+        /**
+         * Converts grid coordinates in local face space to LocalPosition structure.
+         *
+         * Does not perform a wrap function.
+         *
+         * @param faceId     If id face which local space is worked on
+         * @param gridCoords Integer 2d index to grid ion the face, computed position is corresponding to center of the grid cell.
+         *
+         * @return LocalPosition Local space position, may not lie on the cube face if grid coords passed beyond edge.
+         */
         LocalPosition gridCoordsToLocalPos(FaceID faceId, glm::ivec2 gridCoords) const;
 
         /**
@@ -49,6 +80,15 @@ namespace gp
          * @return RegionID Resultign region id possible on a new face.
          */
         RegionID localPosToRegion(LocalPosition lPos, glm::vec2 *offsetReference = nullptr, bool allowWrap = true) const;
+
+        /**
+         * Calculates region id and region inner offset from local face grid position.
+         *
+         * @param faceId     If id face which local space is worked on.
+         * @param gridCoords Integer 2d index into grid cell of the face.
+         * @param allowWrap  Flag allowing wrap operation if coordinates surpasses an edge.
+         * @return RegionID  Resultign region id possible on a new face.
+         */
         inline RegionID localPosToRegion(FaceID faceId, glm::uvec2 gridCoords, bool allowWrap = true) const
         {
             return localPosToRegion(gridCoordsToLocalPos(faceId, gridCoords), nullptr, allowWrap);
@@ -70,10 +110,10 @@ namespace gp
         }
 
         /**
-         * perform and wrap operation on LocalPosition if necessary
+         * Performs and wrap operation on LocalPosition if it is necessary
          *
          * @param lPos position to be wrapped
-         * @return LocalPosition warped position or with invalid face id on not allowed double wrap.
+         * @return LocalPosition warped position or LocalPosition with invalid face id if not allowed double wrap was performed.
          */
         LocalPosition wrapLocalPosition(LocalPosition lPos) const;
 
