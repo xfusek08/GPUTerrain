@@ -1,23 +1,10 @@
 
-cmake_minimum_required(VERSION 3.12.4)
+cmake_minimum_required(VERSION 3.15.0)
 
 project(
   GeoPlanetLib
   VERSION 0.0.0
 )
-
-# find GPUengine library
-if(NOT TARGET GPUEngine)
-    find_package(GPUEngine COMPONENTS REQUIRED
-        geCore
-        geGL
-        geUtil
-    )
-endif()
-
-if(NOT TARGET glm)
-  find_package(glm REQUIRED)
-endif()
 
 SET(CMAKE_DEBUG_POSTFIX           "d"  CACHE STRING "add a postfix, usually d on windows")
 SET(CMAKE_RELEASE_POSTFIX         ""   CACHE STRING "add a postfix, usually empty on windows")
@@ -27,68 +14,75 @@ SET(CMAKE_MINSIZEREL_POSTFIX      "s"  CACHE STRING "add a postfix, usually empt
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 
-set(DEFAULT_RESOERCES_PATH "${CMAKE_CURRENT_LIST_DIR}/resources")
-set(${APP_NAME}_RESOURCES  "${DEFAULT_RESOERCES_PATH}" CACHE PATH "Relative or absolute path to Application resources.")
+if(NOT TARGET glm)
+  find_package(glm REQUIRED)
+endif()
 
-set(SOURCES
-    src/${PROJECT_NAME}/Utils.h
-    src/${PROJECT_NAME}/CoordinateTypes.h
-    src/${PROJECT_NAME}/CoordinateSystem.h src/${PROJECT_NAME}/CoordinateSystem.cpp
-    src/${PROJECT_NAME}/SurfacePosition.h  src/${PROJECT_NAME}/SurfacePosition.cpp
-    src/${PROJECT_NAME}/Region.h           src/${PROJECT_NAME}/Region.cpp
-    src/${PROJECT_NAME}/TectonicPlate.h    src/${PROJECT_NAME}/TectonicPlate.cpp
-    src/${PROJECT_NAME}/Surface.h          src/${PROJECT_NAME}/Surface.cpp
-    src/${PROJECT_NAME}/SurfaceGenerator.h src/${PROJECT_NAME}/SurfaceGenerator.cpp
-)
+add_library(${PROJECT_NAME} SHARED "")
 
-set(SOURCES_MODIFIERS
-    src/${PROJECT_NAME}/modifiers/ModifierType.h
-    src/${PROJECT_NAME}/modifiers/ModifierFactory.h
-    src/${PROJECT_NAME}/modifiers/SurfaceModifier.h       src/${PROJECT_NAME}/modifiers/SurfaceModifier.cpp
-    src/${PROJECT_NAME}/modifiers/ModifierVariable.h      src/${PROJECT_NAME}/modifiers/ModifierVariable.cpp
-
-    src/${PROJECT_NAME}/modifiers/modifiers.h
-    src/${PROJECT_NAME}/modifiers/JitterModifier.h        src/${PROJECT_NAME}/modifiers/JitterModifier.cpp
-    src/${PROJECT_NAME}/modifiers/TectonicPlateModifier.h src/${PROJECT_NAME}/modifiers/TectonicPlateModifier.cpp
-    src/${PROJECT_NAME}/modifiers/ElevationModifier.h     src/${PROJECT_NAME}/modifiers/ElevationModifier.cpp
-)
-
-set(SOURCES_VENDOR
+set(PRIVATE_SOURCES
+    # vendor header libraries
     src/vendor/PerlinNoise/PerlinNoise.hpp
+
+    # headers
+    src/${PROJECT_NAME}/Utils.h
+
+    # source files
+
+    # ./
+    src/${PROJECT_NAME}/CoordinateSystem.cpp
+    src/${PROJECT_NAME}/Region.cpp
+    src/${PROJECT_NAME}/Surface.cpp
+    src/${PROJECT_NAME}/SurfaceGenerator.cpp
+    src/${PROJECT_NAME}/SurfacePosition.cpp
+    src/${PROJECT_NAME}/TectonicPlate.cpp
+
+    # ./modifiers
+    src/${PROJECT_NAME}/modifiers/ElevationModifier.cpp
+    src/${PROJECT_NAME}/modifiers/JitterModifier.cpp
+    src/${PROJECT_NAME}/modifiers/ModifierVariable.cpp
+    src/${PROJECT_NAME}/modifiers/SurfaceModifier.cpp
+    src/${PROJECT_NAME}/modifiers/TectonicPlateModifier.cpp
 )
 
-source_group("${PROJECT_NAME}"            FILES ${SOURCES})
-source_group("${PROJECT_NAME}\\modifiers" FILES ${SOURCES_MODIFIERS})
-source_group("vendor"                     FILES ${SOURCES_VENDOR})
+set(PUBLIC_INCLUDES
+    # ./
+    src/${PROJECT_NAME}/CoordinateSystem.h
+    src/${PROJECT_NAME}/CoordinateTypes.h
+    src/${PROJECT_NAME}/Region.h
+    src/${PROJECT_NAME}/Surface.h
+    src/${PROJECT_NAME}/SurfaceGenerator.h
+    src/${PROJECT_NAME}/SurfacePosition.h
+    src/${PROJECT_NAME}/TectonicPlate.h
 
-add_library(${PROJECT_NAME} SHARED                                  # Creating a shared (*.dll) library named by project name
-    ${SOURCES}                                                      # and created form "SOURCES" and "INCLUDES" source files.
-    ${SOURCES_MODIFIERS}
-    ${SOURCES_VENDOR}
+    # ./modifiers
+    src/${PROJECT_NAME}/modifiers/ElevationModifier.h
+    src/${PROJECT_NAME}/modifiers/JitterModifier.h
+    src/${PROJECT_NAME}/modifiers/ModifierFactory.h
+    src/${PROJECT_NAME}/modifiers/modifiers.h
+    src/${PROJECT_NAME}/modifiers/ModifierType.h
+    src/${PROJECT_NAME}/modifiers/ModifierVariable.h
+    src/${PROJECT_NAME}/modifiers/SurfaceModifier.h
+    src/${PROJECT_NAME}/modifiers/TectonicPlateModifier.h
 )
 
-add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+# see: https://crascit.com/2016/01/31/enhanced-source-file-handling-with-target_sources/
+target_sources(${PROJECT_NAME}
+    PRIVATE ${PRIVATE_SOURCES}
+    PUBLIC  ${PUBLIC_INCLUDES}
+)
 
 target_link_libraries(${PROJECT_NAME}
-    geGL
-    geUtil
-    glm
+    PUBLIC glm
 )
 
 target_include_directories(${PROJECT_NAME}                          # Including files from src directory to project, so compiler will
-  PUBLIC src                                                        # be able to include necessary header files.
+    PUBLIC src                                                      # be able to include necessary header files.
 )
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC
     $<$<CONFIG:DEBUG>:"GP_DEBUG">
 )
-
-option(${PROJECT_NAME}_BUILD_TESTS "toggle building of unit tests") # Setting an option for user of cmake to build project with unit tests.
-if(${PROJECT_NAME}_BUILD_TESTS)                                     # Condition if option specified above is set to ON.
-  enable_testing()                                                  # Enable cmake testing framework.
-  add_subdirectory(tests)                                           # Add subdirectory with cmake project with unit test and corresponding cmake.
-  add_test(NAME baseTest COMMAND tests)                             # Adding cmake tests from project added above to cmake testing framework.
-endif()                                                             # End of condition.
 
 ##############################################################################################################################
 # Here is generation of (OnWindows-necessary) makra definitions for exporting symbols from shared (*.dll) library
@@ -102,3 +96,30 @@ include(GenerateExportHeader)                                       # Including 
 generate_export_header(${PROJECT_NAME}                              # Generating header file with makra definitions with specified full filename.
   EXPORT_FILE_NAME ${PROJECT_NAME}/${PROJECT_NAME_LOWER}_export.h
 )
+
+# configuration inspired by: https://github.com/dormon/SDL2CPP/blob/master/CMakeUtils.cmake
+set_property(TARGET ${PROJECT_NAME} PROPERTY INTERFACE_${PROJECT_NAME}_MAJOR_VERSION ${PROJECT_VERSION_MAJOR})
+set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY COMPATIBLE_INTERFACE_STRING ${PROJECT_NAME}_MAJOR_VERSION)
+
+install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Targets
+    LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+install(
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME_LOWER}_export.h
+    DESTINATION include
+)
+
+# https://stackoverflow.com/a/25933984
+foreach (file ${PUBLIC_INCLUDES} )
+    get_filename_component(dir ${file} DIRECTORY)
+    if (${dir} STREQUAL src )
+        set(dir )
+    else()
+        string(REPLACE src/ "" dir ${dir})
+    endif()
+    install(FILES ${file} DESTINATION include/${dir} )
+endforeach()
