@@ -1,34 +1,21 @@
+#
+# File: GeoPlanetLib/CMakeLists.txt
+# Original file: https://github.com/dormon/SDL2CPP/blob/master/CMakeLists.txt
+# Author: Petr Fusek
+#
+# This file serves for proper cmake configuration with usage of "CMakeUtils.cmake"
+# To generate GeoPlanetLib project as shared library provided by cmake paskage
+#
 
-cmake_minimum_required(VERSION 3.15.0)
+cmake_minimum_required(VERSION 3.15)
 
 project(
-  GeoPlanetLib
-  VERSION 0.0.0
+    GeoPlanetLib
+    VERSION 0.0.0
 )
 
-SET(CMAKE_DEBUG_POSTFIX           "d"  CACHE STRING "add a postfix, usually d on windows")
-SET(CMAKE_RELEASE_POSTFIX         ""   CACHE STRING "add a postfix, usually empty on windows")
-SET(CMAKE_RELWITHDEBINFO_POSTFIX  "rd" CACHE STRING "add a postfix, usually empty on windows")
-SET(CMAKE_MINSIZEREL_POSTFIX      "s"  CACHE STRING "add a postfix, usually empty on windows")
-
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
-
-if(NOT TARGET glm)
-  find_package(glm REQUIRED)
-endif()
-
-add_library(${PROJECT_NAME} SHARED "")
-
-set(PRIVATE_SOURCES
-    # vendor header libraries
-    src/vendor/PerlinNoise/PerlinNoise.hpp
-
-    # headers
-    src/${PROJECT_NAME}/Utils.h
-
-    # source files
-
+#set these variables to *.cpp, *.c, ..., *.h, *.hpp, ...
+set(SOURCES
     # ./
     src/${PROJECT_NAME}/CoordinateSystem.cpp
     src/${PROJECT_NAME}/Region.cpp
@@ -44,8 +31,14 @@ set(PRIVATE_SOURCES
     src/${PROJECT_NAME}/modifiers/SurfaceModifier.cpp
     src/${PROJECT_NAME}/modifiers/TectonicPlateModifier.cpp
 )
-
+set(PRIVATE_INCLUDES
+    # headers
+    src/${PROJECT_NAME}/Utils.h
+)
 set(PUBLIC_INCLUDES
+    # vendor header libraries
+    src/vendor/PerlinNoise/PerlinNoise.hpp
+
     # ./
     src/${PROJECT_NAME}/CoordinateSystem.h
     src/${PROJECT_NAME}/CoordinateTypes.h
@@ -65,61 +58,41 @@ set(PUBLIC_INCLUDES
     src/${PROJECT_NAME}/modifiers/SurfaceModifier.h
     src/${PROJECT_NAME}/modifiers/TectonicPlateModifier.h
 )
+set(INTERFACE_INCLUDES )
 
-# see: https://crascit.com/2016/01/31/enhanced-source-file-handling-with-target_sources/
-target_sources(${PROJECT_NAME}
-    PRIVATE ${PRIVATE_SOURCES}
-    PUBLIC  ${PUBLIC_INCLUDES}
-)
+#list of libraries to find
+#it should contain list of "lists"
+#format:
+#set(ExternLibraries
+#  A\\ B\\ C\\ D
+#  E\\ F\\ G
+#  )
+#It will be converted into:
+#find_package(A B C D)
+#find_package(E F G)
+#If version is specified, it has to be the second parameter (B)
+set(ExternPrivateLibraries )
+set(ExternPublicLibraries glm\\ REQUIRED)
+set(ExternInterfaceLibraries )
 
-target_link_libraries(${PROJECT_NAME}
-    PUBLIC glm
-)
+#set these variables to targets
+set(PrivateTargets )
+set(PublicTargets glm)
+set(InterfaceTargets )
 
-target_include_directories(${PROJECT_NAME}                          # Including files from src directory to project, so compiler will
-    PUBLIC src                                                      # be able to include necessary header files.
-)
+#set these libraries to variables that are provided by libraries that does not support configs
+set(PrivateIncludeVariables )
+set(PublicIncludeVariables )
+set(InterfaceIncludeVariables )
+set(PrivateReleaseLibraryVariables )
+set(PublicReleaseLibraryVariables )
+set(InterfaceReleaseLibraryVariables )
+set(PrivateDebugLibraryVariables )
+set(PublicDebugLibraryVariables )
+set(InterfaceDebugLibraryVariables )
+
+include(CMakeUtils.cmake)
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC
     $<$<CONFIG:DEBUG>:"GP_DEBUG">
 )
-
-##############################################################################################################################
-# Here is generation of (OnWindows-necessary) makra definitions for exporting symbols from shared (*.dll) library
-# Custom variant of "set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)" command
-##############################################################################################################################
-
-set(PROJECT_NAME_LOWER)                                             # Setting a variable where lowered version of project name will be stored.
-string(TOLOWER ${PROJECT_NAME} PROJECT_NAME_LOWER)                  # Storing a lowered project name to "PROJECT_NAME_LOWER" variables.
-
-include(GenerateExportHeader)                                       # Including library with following "generate_export_header" function.
-generate_export_header(${PROJECT_NAME}                              # Generating header file with makra definitions with specified full filename.
-  EXPORT_FILE_NAME ${PROJECT_NAME}/${PROJECT_NAME_LOWER}_export.h
-)
-
-# configuration inspired by: https://github.com/dormon/SDL2CPP/blob/master/CMakeUtils.cmake
-set_property(TARGET ${PROJECT_NAME} PROPERTY INTERFACE_${PROJECT_NAME}_MAJOR_VERSION ${PROJECT_VERSION_MAJOR})
-set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY COMPATIBLE_INTERFACE_STRING ${PROJECT_NAME}_MAJOR_VERSION)
-
-install(TARGETS ${PROJECT_NAME} EXPORT ${PROJECT_NAME}Targets
-    LIBRARY  DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE  DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME  DESTINATION ${CMAKE_INSTALL_BINDIR}
-    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-)
-
-install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME_LOWER}_export.h
-    DESTINATION include
-)
-
-# https://stackoverflow.com/a/25933984
-foreach (file ${PUBLIC_INCLUDES} )
-    get_filename_component(dir ${file} DIRECTORY)
-    if (${dir} STREQUAL src )
-        set(dir )
-    else()
-        string(REPLACE src/ "" dir ${dir})
-    endif()
-    install(FILES ${file} DESTINATION include/${dir} )
-endforeach()
